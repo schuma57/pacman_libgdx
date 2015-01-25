@@ -1,8 +1,8 @@
 package com.pacman.model;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-
-import com.pacman.iterators.MazeIterator;
+import java.util.List;
 
 public class Maze implements Iterable<GameElement>{
 	private int[][] tableMaze1 = new int[][]{
@@ -74,6 +74,14 @@ public class Maze implements Iterable<GameElement>{
 
 	@Override
 	public Iterator<GameElement> iterator() {
-		return new MazeIterator(this);
+		int i,j;
+		List<GameElement> list = new ArrayList<GameElement>();
+		for(i = 0 ; i < height ; i++){
+			for(j = 0 ; j < width; j++){
+				if(tableMaze2[i][j] != null)
+					list.add(tableMaze2[i][j]);
+			}
+		}
+		return list.iterator();
 	}
 }
