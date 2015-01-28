@@ -3,6 +3,7 @@ package com.pacman.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.pacman.model.World;
 import com.pacman.view.TextureFactory;
 import com.pacman.view.WorldRenderer;
@@ -10,17 +11,19 @@ import com.pacman.view.WorldRenderer;
 public class GameScreen implements Screen{
 	private World world;
 	private WorldRenderer renderer;
+	private OrthographicCamera camera;
 	
 	public GameScreen(){
 		world = new World();
 		renderer = new WorldRenderer(world);
+		camera = new OrthographicCamera();
 	}
-
 	
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(0, 0, 0, 0);
+		renderer.getBatch().setProjectionMatrix(camera.combined);
 		renderer.render(delta);
 	}
 	
@@ -43,6 +46,10 @@ public class GameScreen implements Screen{
 	public void resize(int width, int height) {
 		renderer.setBoxSizeX( (float)width / (float)world.getWidth());
 		renderer.setBoxSizeY( (float)height / (float)world.getHeight());
+		
+		camera.setToOrtho(false, width, height);
+	    camera.position.set (width / 2, height / 2, 0);
+	    camera.update();
 	}
 
 	@Override

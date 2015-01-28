@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class GameElement {
-	private float posX;
-	private float posY;
+	protected float posX;
+	protected float posY;
 	
 	public GameElement(float x, float y){
 		posX = x;

@@ -74,10 +74,10 @@ public class Maze implements Iterable<GameElement>{
 
 	@Override
 	public Iterator<GameElement> iterator() {
-		int i,j;
 		List<GameElement> list = new ArrayList<GameElement>();
+		int i,j;
 		for(i = 0 ; i < height ; i++){
-			for(j = 0 ; j < width; j++){
+			for(j = 0 ; j < width ; j++){
 				if(tableMaze2[i][j] != null)
 					list.add(tableMaze2[i][j]);
 			}
