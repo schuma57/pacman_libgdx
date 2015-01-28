@@ -21,10 +21,10 @@ public class World implements Iterable<GameElement>{
 	private void createGhosts(){
 		listGhosts = new ArrayList<Ghost>();
 		//for(int i = 0 ; i < nbGhosts ; i++)
-			listGhosts.add(new GhostRed(12, 16));
-			listGhosts.add(new GhostBlue(13, 16));
-			listGhosts.add(new GhostPink(14, 16));
-			listGhosts.add(new GhostYellow(15, 16));
+			listGhosts.add(new GhostRed(14, 12));
+			listGhosts.add(new GhostBlue(14, 13));
+			listGhosts.add(new GhostPink(14, 14));
+			listGhosts.add(new GhostYellow(14, 15));
 	}
 	
 	public int getHeight(){

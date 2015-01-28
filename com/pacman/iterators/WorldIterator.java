@@ -28,7 +28,7 @@ public class WorldIterator implements Iterator<GameElement>{
 	@Override
 	public GameElement next() {
 		if(!this.hasNext())
-			throw new NoSuchElementException("Game Element list is empty");
+			throw new NoSuchElementException("GameElement list is empty");
 		
 		if(current == 0){
 			if(!mazeIterator.hasNext())
