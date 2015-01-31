@@ -5,17 +5,22 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.pacman.iterators.WorldIterator;
+import com.pacman.listeners.WorldListener;
 
 public class World implements Iterable<GameElement>{
+	public static final float moveSpeed = 0.5f;
+	private WorldListener listener;
+	
 	private Maze maze;
 	private Pacman pac;
 	private List<Ghost> listGhosts;
 	//private final int nbGhosts = 4;
 	
-	public World(){
+	public World(){ 
 		pac = new Pacman(1, 1);
 	    maze = new Maze();
 	    createGhosts();
+	    listener = new WorldListener(this);
 	}
 	
 	private void createGhosts(){
@@ -45,6 +50,10 @@ public class World implements Iterable<GameElement>{
 
 	public List<Ghost> getListGhosts(){
 		return listGhosts;
+	}
+	
+	public WorldListener getListener(){
+		return listener;
 	}
 	
 	@Override

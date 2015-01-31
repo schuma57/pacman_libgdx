@@ -28,6 +28,15 @@ public class GameScreen implements Screen{
 	}
 	
 	@Override
+	public void resize(int width, int height) {
+		renderer.resize(width, height);
+		
+		camera.setToOrtho(false, width, height);
+	    camera.position.set (width / 2, height / 2, 0);
+	    camera.update();
+	}
+	
+	@Override
 	public void dispose() {
 		// empty
 	}
@@ -40,16 +49,6 @@ public class GameScreen implements Screen{
 	@Override
 	public void pause() {
 		// empty
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		renderer.setBoxSizeX( (float)width / (float)world.getWidth());
-		renderer.setBoxSizeY( (float)height / (float)world.getHeight());
-		
-		camera.setToOrtho(false, width, height);
-	    camera.position.set (width / 2, height / 2, 0);
-	    camera.update();
 	}
 
 	@Override
