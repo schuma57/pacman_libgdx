@@ -56,6 +56,8 @@ public class Maze implements Iterable<GameElement>{
       		for( j = 0 ; j < width ; j++){
       			if(tableMaze1[i][j] == 0)
       				tableMaze2[i][j] = new Block(i, j);
+      			else
+      				tableMaze2[i][j] = new Pellet(i, j);
       		}
       	}
     }
@@ -72,6 +74,11 @@ public class Maze implements Iterable<GameElement>{
 		return tableMaze2[x][y];
 	}
 
+	public void removeElement(int x, int y){
+		if(tableMaze2[x][y] instanceof Bonus)
+			tableMaze2[x][y] = null;
+	}
+	
 	@Override
 	public Iterator<GameElement> iterator() {
 		List<GameElement> list = new ArrayList<GameElement>();

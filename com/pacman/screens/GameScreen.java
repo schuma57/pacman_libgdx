@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.pacman.factories.TextureFactory;
 import com.pacman.model.World;
-import com.pacman.view.TextureFactory;
 import com.pacman.view.WorldRenderer;
 
 public class GameScreen implements Screen{

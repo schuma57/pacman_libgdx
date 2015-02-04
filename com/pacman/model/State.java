@@ -4,7 +4,8 @@ public enum State {
 	UP("Up"),
 	DOWN("Down"),
 	LEFT("Left"),
-	RIGHT("Right");
+	RIGHT("Right"),
+	FRONT("Front");
 	
 	private String text;
 	

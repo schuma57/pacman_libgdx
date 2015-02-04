@@ -1,7 +1,7 @@
 package com.pacman.view;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.pacman.factories.TextureFactory;
 import com.pacman.model.GameElement;
 import com.pacman.model.Pacman;
 import com.pacman.model.World;
@@ -15,13 +15,12 @@ public class WorldRenderer {
 	public WorldRenderer(World world){
 		this.world = world;
 		sBatch = new SpriteBatch();
-		Gdx.input.setInputProcessor( world.getListener());
+		//Gdx.input.setInputProcessor( world.getListener());
 	}
 	
 	public void render(float delta){	
-        //movePacman();
 		sBatch.begin();
-		
+		world.getListener().movePacman(delta);
 		for(GameElement element : world){
 			renderElement(element);
 		}
@@ -30,7 +29,7 @@ public class WorldRenderer {
 	
 	private void renderElement(GameElement element ){
 		String textur = null;
-		if(!element.getName().equals(Pacman.class.toString()) )
+		if( !(element instanceof Pacman) )
 			textur = element.getName();
 		else{
 			Pacman pac = (Pacman)element;
@@ -39,8 +38,8 @@ public class WorldRenderer {
 		
 		sBatch.draw(
 				TextureFactory.getInstance().getTexture(textur),
-				element.getPosition().get("y") * boxSizeX,
-				(world.getHeight() - element.getPosition().get("x") -1) * boxSizeY,
+				element.getPosY() * boxSizeX,
+				(world.getHeight() - element.getPosX() -1) * boxSizeY,
 				boxSizeX,
 				boxSizeY
 		);

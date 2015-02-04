@@ -1,8 +1,5 @@
 package com.pacman.model;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public abstract class GameElement {
 	protected float posX;
 	protected float posY;
@@ -12,9 +9,12 @@ public abstract class GameElement {
 		posY = y;
 	}
 	
-	@SuppressWarnings("serial")
-	public Map<String, Float> getPosition(){
-		return new HashMap<String, Float>(){{put("x", posX);put("y", posY);}};
+	public float getPosX(){
+		return posX;
+	}
+	
+	public float getPosY(){
+		return posY;
 	}
 	
 	public String getName(){

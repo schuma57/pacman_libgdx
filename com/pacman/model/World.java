@@ -15,12 +15,14 @@ public class World implements Iterable<GameElement>{
 	private Pacman pac;
 	private List<Ghost> listGhosts;
 	//private final int nbGhosts = 4;
+	private int nbPoints;
 	
 	public World(){ 
 		pac = new Pacman(1, 1);
 	    maze = new Maze();
 	    createGhosts();
 	    listener = new WorldListener(this);
+	    nbPoints = 0;
 	}
 	
 	private void createGhosts(){
@@ -54,6 +56,18 @@ public class World implements Iterable<GameElement>{
 	
 	public WorldListener getListener(){
 		return listener;
+	}
+	
+	public int getNbPoints(){
+		return nbPoints;
+	}
+	
+	public void addPoints(int points){
+		nbPoints += points;
+	}
+	
+	public void removeElement(int x, int y){
+		maze.removeElement(x, y);
 	}
 	
 	@Override
