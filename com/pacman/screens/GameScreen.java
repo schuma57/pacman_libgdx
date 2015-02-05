@@ -5,15 +5,18 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.pacman.factories.TextureFactory;
+import com.pacman.game.PacManGame;
 import com.pacman.model.World;
 import com.pacman.view.WorldRenderer;
 
 public class GameScreen implements Screen{
+	private PacManGame game;
 	private World world;
 	private WorldRenderer renderer;
 	private OrthographicCamera camera;
 	
-	public GameScreen(){
+	public GameScreen(PacManGame game){
+		this.game = game;
 		world = new World();
 		renderer = new WorldRenderer(world);
 		camera = new OrthographicCamera();
@@ -23,6 +26,12 @@ public class GameScreen implements Screen{
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(0, 0, 0, 0);
+		if(world.isDeath()){
+			game.setScreen(new DeathScreen());
+		}
+		if(world.isWin()){
+			game.setScreen(new WinScreen());
+		}
 		renderer.getBatch().setProjectionMatrix(camera.combined);
 		renderer.render(delta);
 	}
@@ -38,7 +47,7 @@ public class GameScreen implements Screen{
 	
 	@Override
 	public void dispose() {
-		// empty
+		//empty
 	}
 
 	@Override
@@ -59,5 +68,9 @@ public class GameScreen implements Screen{
 	@Override
 	public void show() {
 		TextureFactory.reset();
+	}
+	
+	public void displayDeath(){
+		game.setScreen(new DeathScreen());
 	}
 }

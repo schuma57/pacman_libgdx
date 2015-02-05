@@ -5,33 +5,34 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.pacman.iterators.WorldIterator;
-import com.pacman.listeners.WorldListener;
+import com.pacman.observers.WorldListener;
 
 public class World implements Iterable<GameElement>{
-	public static final float moveSpeed = 0.5f;
 	private WorldListener listener;
 	
 	private Maze maze;
 	private Pacman pac;
 	private List<Ghost> listGhosts;
-	//private final int nbGhosts = 4;
 	private int nbPoints;
+	private boolean death;
+	private boolean win;
 	
 	public World(){ 
 		pac = new Pacman(1, 1);
 	    maze = new Maze();
 	    createGhosts();
-	    listener = new WorldListener(this);
 	    nbPoints = 0;
+	    death = false;
+	    win = false;
+	    listener = new WorldListener(this);
 	}
 	
 	private void createGhosts(){
 		listGhosts = new ArrayList<Ghost>();
-		//for(int i = 0 ; i < nbGhosts ; i++)
-			listGhosts.add(new GhostRed(14, 12));
-			listGhosts.add(new GhostBlue(14, 13));
-			listGhosts.add(new GhostPink(14, 14));
-			listGhosts.add(new GhostYellow(14, 15));
+		listGhosts.add(new GhostRed(14, 12));
+		listGhosts.add(new GhostBlue(14, 13));
+		listGhosts.add(new GhostPink(14, 14));
+		listGhosts.add(new GhostYellow(14, 15));
 	}
 	
 	public int getHeight(){
@@ -68,6 +69,22 @@ public class World implements Iterable<GameElement>{
 	
 	public void removeElement(int x, int y){
 		maze.removeElement(x, y);
+	}
+	
+	public void death(){
+		death = true;
+	}
+	
+	public boolean isDeath(){
+		return death;
+	}
+	
+	public boolean isWin(){
+		return win;
+	}
+	
+	public void win(){
+		win = true; 
 	}
 	
 	@Override

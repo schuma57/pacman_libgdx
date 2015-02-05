@@ -21,6 +21,8 @@ public class WorldRenderer {
 	public void render(float delta){	
 		sBatch.begin();
 		world.getListener().movePacman(delta);
+		world.getListener().testDeath();
+		world.getListener().testWin();
 		for(GameElement element : world){
 			renderElement(element);
 		}

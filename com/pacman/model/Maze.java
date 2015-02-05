@@ -19,8 +19,8 @@ public class Maze implements Iterable<GameElement>{
 		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
 		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
 		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 3, 3, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-		    {1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1},
+		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 9, 9, 9, 9, 9, 9, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
+		    {1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 0, 9, 9, 9, 9, 9, 9, 0, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1},
 		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
 		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
 		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0},
@@ -56,7 +56,7 @@ public class Maze implements Iterable<GameElement>{
       		for( j = 0 ; j < width ; j++){
       			if(tableMaze1[i][j] == 0)
       				tableMaze2[i][j] = new Block(i, j);
-      			else
+      			else if(tableMaze1[i][j] != 9 && tableMaze1[i][j] != 3)
       				tableMaze2[i][j] = new Pellet(i, j);
       		}
       	}
@@ -77,6 +77,19 @@ public class Maze implements Iterable<GameElement>{
 	public void removeElement(int x, int y){
 		if(tableMaze2[x][y] instanceof Bonus)
 			tableMaze2[x][y] = null;
+	}
+	
+	public int getNbPellets(){
+		int nb = 0;
+		int i,j = 0;
+      	for( i = 0 ; i < height ; i++ ){
+      		for( j = 0 ; j < width ; j++){
+      			if(tableMaze2[i][j] instanceof Bonus)
+      				nb++;
+      		}
+      	}
+      	System.out.println("Nb pellets = " +nb);
+      	return nb;
 	}
 	
 	@Override

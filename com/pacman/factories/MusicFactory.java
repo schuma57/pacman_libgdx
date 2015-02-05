@@ -14,6 +14,7 @@ public class MusicFactory {
 		musics = new HashMap<String, Music>();
 		musics.put("beginning", Gdx.audio.newMusic(Gdx.files.internal("sounds/pacman-beginning.ogg")));
 		musics.put("interMission", Gdx.audio.newMusic(Gdx.files.internal("sounds/pacman-intermission.ogg")));
+		musics.put("victory", Gdx.audio.newMusic(Gdx.files.internal("sounds/victory.ogg")));
 	}
 	
 	public static MusicFactory getInstance(){
