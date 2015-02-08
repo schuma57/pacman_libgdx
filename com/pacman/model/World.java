@@ -14,6 +14,7 @@ public class World implements Iterable<GameElement>{
 	private Pacman pac;
 	private List<Ghost> listGhosts;
 	private int nbPoints;
+	//private boolean eatghost;
 	private boolean death;
 	private boolean win;
 	
@@ -22,8 +23,7 @@ public class World implements Iterable<GameElement>{
 	    maze = new Maze();
 	    createGhosts();
 	    nbPoints = 0;
-	    death = false;
-	    win = false;
+	   // death = win = eatghost = false;
 	    listener = new WorldListener(this);
 	}
 	
@@ -79,11 +79,11 @@ public class World implements Iterable<GameElement>{
 		return death;
 	}
 	
-	public boolean isWin(){
+	public boolean hasWin(){
 		return win;
 	}
 	
-	public void win(){
+	public void winGame(){
 		win = true; 
 	}
 	

@@ -14,6 +14,7 @@ public class GameScreen implements Screen{
 	private World world;
 	private WorldRenderer renderer;
 	private OrthographicCamera camera;
+	float dt = Gdx.graphics.getRawDeltaTime();
 	
 	public GameScreen(PacManGame game){
 		this.game = game;
@@ -29,7 +30,7 @@ public class GameScreen implements Screen{
 		if(world.isDeath()){
 			game.setScreen(new DeathScreen());
 		}
-		if(world.isWin()){
+		if(world.hasWin()){
 			game.setScreen(new WinScreen());
 		}
 		renderer.getBatch().setProjectionMatrix(camera.combined);
@@ -68,9 +69,5 @@ public class GameScreen implements Screen{
 	@Override
 	public void show() {
 		TextureFactory.reset();
-	}
-	
-	public void displayDeath(){
-		game.setScreen(new DeathScreen());
 	}
 }

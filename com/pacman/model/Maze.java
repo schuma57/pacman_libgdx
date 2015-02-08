@@ -9,7 +9,7 @@ public class Maze implements Iterable<GameElement>{
 		    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		    {0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 0},
 		    {0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
-		    {0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
+		    {0, 5, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 5, 0},
 		    {0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
 		    {0, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 0},
 		    {0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0},
@@ -29,7 +29,7 @@ public class Maze implements Iterable<GameElement>{
 		    {0, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 0, 0, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 0},
 		    {0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
 		    {0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
-		    {0, 1, 1, 1, 0, 0, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 0, 0, 1, 1, 1, 0},
+		    {0, 5, 1, 1, 0, 0, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 0, 0, 1, 1, 5, 0},
 		    {0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0},
 		    {0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0},
 		    {0, 1, 1, 2, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0},
@@ -42,11 +42,13 @@ public class Maze implements Iterable<GameElement>{
 	private GameElement[][] tableMaze2;
 	private int height;
 	private int width;
+	private List<Bonus> listPellets;
 	
 	public Maze(){
 		height = tableMaze1.length;
 		width  = tableMaze1[0].length;
 		tableMaze2 = new GameElement[height][width];
+		listPellets = new ArrayList<Bonus>();
 		createMaze();
 	}
 	
@@ -56,8 +58,12 @@ public class Maze implements Iterable<GameElement>{
       		for( j = 0 ; j < width ; j++){
       			if(tableMaze1[i][j] == 0)
       				tableMaze2[i][j] = new Block(i, j);
-      			else if(tableMaze1[i][j] != 9 && tableMaze1[i][j] != 3)
-      				tableMaze2[i][j] = new Pellet(i, j);
+      			else{
+      				if(tableMaze1[i][j] == 5)
+      					tableMaze2[i][j] = new SuperPellet(i, j);
+      				else if(tableMaze1[i][j] != 9 && tableMaze1[i][j] != 3)
+      					tableMaze2[i][j] = new Pellet(i, j);
+      			}
       		}
       	}
     }
@@ -69,32 +75,41 @@ public class Maze implements Iterable<GameElement>{
 	public int getWidth(){
 		return width;
 	}
+
+	public List<Bonus> getListPellets(){
+		return listPellets;
+	}
 	
 	public GameElement getElement(int x, int y){
 		return tableMaze2[x][y];
 	}
-
+	
 	public void removeElement(int x, int y){
 		if(tableMaze2[x][y] instanceof Bonus)
 			tableMaze2[x][y] = null;
 	}
 	
+	public void removePellet(Bonus pellet){
+		if(pellet != null && listPellets.contains(pellet))
+			listPellets.remove(pellet);
+	}
+	
 	public int getNbPellets(){
+		//return 0;
 		int nb = 0;
-		int i,j = 0;
-      	for( i = 0 ; i < height ; i++ ){
-      		for( j = 0 ; j < width ; j++){
-      			if(tableMaze2[i][j] instanceof Bonus)
-      				nb++;
-      		}
-      	}
-      	System.out.println("Nb pellets = " +nb);
+		for(GameElement[] tab : tableMaze2){
+			for(GameElement element : tab){
+				if(element instanceof Bonus)
+					nb++;
+			}
+		}
       	return nb;
 	}
 	
 	@Override
 	public Iterator<GameElement> iterator() {
 		List<GameElement> list = new ArrayList<GameElement>();
+		list.addAll(listPellets);
 		int i,j;
 		for(i = 0 ; i < height ; i++){
 			for(j = 0 ; j < width ; j++){

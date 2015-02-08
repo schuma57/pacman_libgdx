@@ -11,6 +11,7 @@ import com.pacman.model.GhostRed;
 import com.pacman.model.GhostYellow;
 import com.pacman.model.Pacman;
 import com.pacman.model.Pellet;
+import com.pacman.model.SuperPellet;
 
 public class TextureFactory {
 	private static TextureFactory instance = null;
@@ -18,6 +19,7 @@ public class TextureFactory {
 	
 	private TextureFactory(){
 		textures = new HashMap<String, Texture>();
+		textures.put("Pacman", new Texture("images/PacManAnim.png"));
 		textures.put(Pacman.class.toString(), new Texture("images/pacmanRight.png"));
 		textures.put(Block.class.toString(), new Texture("images/bloc.png"));
 		textures.put(GhostRed.class.toString(), new Texture("images/ghost1.png"));
@@ -25,6 +27,7 @@ public class TextureFactory {
 		textures.put(GhostPink.class.toString(), new Texture("images/ghost2.png"));
 		textures.put(GhostYellow.class.toString(), new Texture("images/ghost4.png"));
 		textures.put(Pellet.class.toString(), new Texture("images/pellet.png"));
+		textures.put(SuperPellet.class.toString(), new Texture("images/superpellet-2.png"));
 		textures.put("Right", new Texture("images/pacmanRight.png"));
 		textures.put("Left", new Texture("images/pacmanLeft.png"));
 		textures.put("Up", new Texture("images/pacmanUp.png"));
