@@ -6,4 +6,10 @@ public class GhostPink extends Ghost {
 		super(x, y);
 	}
 
+	@Override
+	public void ghostMove() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

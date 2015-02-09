@@ -4,7 +4,8 @@ public class Pacman extends MoveableElement {
 	
 	public Pacman(float x, float y) {
 		super(x, y);
-		setState(State.FRONT);
+		setState(State.RIGHT);
+		setLastState(State.RIGHT);
 		setSpeed(0.125f);
 	}
 	

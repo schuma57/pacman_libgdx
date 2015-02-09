@@ -5,39 +5,38 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.pacman.adapters.PacmanAdapter;
 import com.pacman.factories.TextureFactory;
 import com.pacman.model.Block;
 import com.pacman.model.Bonus;
 import com.pacman.model.GameElement;
 import com.pacman.model.Ghost;
+import com.pacman.model.MoveableElement;
 import com.pacman.model.Pacman;
 import com.pacman.model.State;
 import com.pacman.model.World;
 
 public class WorldRenderer {
 	private SpriteBatch sBatch;
+	private Sprite sprite;
 	private float boxSizeX;
 	private float boxSizeY;
 	private World world;
 	private Pacman pacman;
-	private PacmanAdapter adapter;
 	private int moveCount = 0;
-	public static final float moveSpeed = 0.5f;
+	private static final float moveSpeed = 0.5f;
 	
 	private Animation anim;
 	private Texture tex;
 	private TextureRegion[] walk;
 	private TextureRegion currentFrame;
-	float stateTime;
+	private float stateTime;
 	
 	public WorldRenderer(World world){
 		this.world = world;
 		pacman = world.getPacman();
-		//adapter = new PacmanAdapter();
-		//pacView = adapter.adaptePacman(world.getPacman(), boxSizeX, boxSizeY);
 		
 		sBatch = new SpriteBatch();
 		Gdx.input.setInputProcessor( world.getListener());
@@ -53,52 +52,59 @@ public class WorldRenderer {
         }
         
         anim = new Animation(0.125f, walk);
-        stateTime = 0f;
+        stateTime = 0f;                                                                                       
 	}
 	
 	public void render(float delta){	
 		stateTime += Gdx.graphics.getDeltaTime();
         currentFrame = anim.getKeyFrame(stateTime, true);
-		
+        createPacman();
+        
         update();
 		sBatch.begin();
 		testDeath();
 		testWin();
+		
 		for(GameElement element : world){
 			renderElement(element);
-		}
-		/*sBatch.draw(currentFrame,
-				pacView.getPosition().y * boxSizeX,
-				pacView.getPosition().x * boxSizeY,
-				boxSizeX,
-				boxSizeY
-				);*/             
-		/*sBatch.draw(
-				TextureFactory.getInstance().getTexture(pacView.getState().toString()),
-				pacView.getPosition().y * boxSizeX,
-				(world.getHeight() - pacView.getPosition().x -1) * boxSizeY,
-				boxSizeX,
-				boxSizeY
-		);*/
+		}                                                                      
+			
+		sprite.draw(sBatch);
 		sBatch.end();
 	}
 	
-	private void renderElement(GameElement element ){
-		String textur = null;
-		if( !(element instanceof Pacman) )
-			textur = element.getName();
-		else{
-			Pacman pac = (Pacman)element;
-			textur = pac.getState().toString();	
-		}
+	private void createPacman(){
+		sprite = new Sprite(currentFrame);
+		sprite.setOriginCenter();
 		
-		sBatch.draw(
-				TextureFactory.getInstance().getTexture(textur),
-				element.getPosY() * boxSizeX,
-				(world.getHeight() - element.getPosX() -1) * boxSizeY,
-				boxSizeX,
-				boxSizeY
-		);
+		sprite.setSize(boxSizeX-2, boxSizeY);
+		
+		sprite.setOriginCenter();
+        sprite.setPosition(
+        		pacman.getPosY() * boxSizeX,
+				(world.getHeight() - pacman.getPosX() -1) * boxSizeY
+        );
+        
+        sprite.setOriginCenter();
+        
+        if(pacman.getLastState() == State.RIGHT)
+        	sprite.rotate(180);
+        else if(pacman.getLastState() == State.DOWN)
+        	sprite.rotate(90);
+        else if(pacman.getLastState() == State.UP)
+        	sprite.rotate(-90); 
+	}
+	
+	private void renderElement(GameElement element ){
+		if( !(element instanceof Pacman) ){
+			sBatch.draw(
+					TextureFactory.getInstance().getTexture(element.getName()),
+					element.getPosY() * boxSizeX,
+					(world.getHeight() - element.getPosX() -1) * boxSizeY,
+					boxSizeX,
+					boxSizeY
+			);
+		}
 	}
 	
 	public void resize(float width, float height){
@@ -117,92 +123,103 @@ public class WorldRenderer {
 	public SpriteBatch getBatch(){
 		return sBatch;
 	}
-
-	public World getWorld(){
-		return world;
-	}
 	
 	public void update(){
-		autoMove();
+		moveCount++;
+		autoMove(pacman);
+		autoMove(world.getListGhosts().get(1));
+		testCollision(world.getListGhosts().get(1));
 		if(moveCount % 2 == 0){
-			testCollision();
+			testCollision(pacman);
+			
 			//eatBonus();
 			displayScore();
 		}
 	}
 	
-	private void testCollision(){
-		float posXFloat = pacman.getPosX();
-		float posYFloat = pacman.getPosY();
-		
-		if(pacman.getState() == State.LEFT){
-			if(pacman.getPosY() -moveSpeed >= 0){	
-				GameElement element =
+	
+	private void testCollision(MoveableElement element){
+		float posXFloat = element.getPosX();
+		float posYFloat = element.getPosY();
+	
+		if(element.getLastState() == State.LEFT){
+			if(element.getPosY() - moveSpeed >= 0){	
+				GameElement ge =
 						world.getMaze().getElement((int)posXFloat, (int) Math.floor(posYFloat));
-				if(element instanceof Block){
-					pacman.setPositionY( pacman.getPosY()+ moveSpeed );
+				if(ge instanceof Block){
+					element.setPositionY( element.getPosY()+ moveSpeed );
 				}
-				else if(element instanceof Bonus)
-					eatPellet((Bonus)element);
+				else if(ge instanceof Bonus){
+					if(element instanceof Pacman)
+						eatPellet((Bonus)ge);
+				}
 			}
 			else
-        		pacman.setPositionY( world.getWidth()-1);
+        		element.setPositionY( world.getWidth()-1);
 		}
-		else if(pacman.getState() == State.RIGHT){
-			if(pacman.getPosY() +moveSpeed < world.getWidth()){
-				GameElement element =
+		else if(element.getLastState() == State.RIGHT){
+			if(element.getPosY() +moveSpeed < world.getWidth()){
+				GameElement ge =
 						world.getMaze().getElement((int)posXFloat, (int) Math.round(posYFloat));
-				if(element instanceof Block){
-					pacman.setPositionY( pacman.getPosY() - moveSpeed );
+				if(ge instanceof Block){
+					element.setPositionY( element.getPosY() - moveSpeed );
 				}
-				else if(element instanceof Bonus)
-					eatPellet((Bonus)element);
+				else if(ge instanceof Bonus){
+					if(element instanceof Pacman)
+						eatPellet((Bonus)ge);
+				}
 			}
 			else
-    			pacman.setPositionY(0);
+    			element.setPositionY(0);
 		}
-		else if(pacman.getState() == State.UP){
-			if(pacman.getPosX() -moveSpeed >= 0){
-				GameElement element =
+		else if(element.getLastState() == State.UP){
+			if(element.getPosX() -moveSpeed >= 0){
+				GameElement ge =
 						world.getMaze().getElement((int)Math.floor(posXFloat), (int)posYFloat);
-				if(element instanceof Block){
-					pacman.setPositionX( pacman.getPosX() + moveSpeed );
+				if(ge instanceof Block){
+					element.setPositionX( element.getPosX() + moveSpeed );
 				}
-				else if(element instanceof Bonus)
-					eatPellet((Bonus)element);
+				else if(ge instanceof Bonus){
+					if(element instanceof Pacman)
+						eatPellet((Bonus)ge);
+				}
 			}
 			else
-        		pacman.setPositionX( world.getHeight()-1 );
+        		element.setPositionX( world.getHeight()-1 );
 		}
-		else if(pacman.getState() == State.DOWN){
-			if(pacman.getPosX() +moveSpeed < world.getHeight()){
-				GameElement element =
+		else if(element.getLastState() == State.DOWN){
+			if(element.getPosX() +moveSpeed < world.getHeight()){
+				GameElement ge =
 						world.getMaze().getElement((int)Math.round(posXFloat), (int)posYFloat);
-				if(element instanceof Block){
-					pacman.setPositionX( pacman.getPosX() - moveSpeed );
+				if(ge instanceof Block){
+					element.setPositionX( element.getPosX() - moveSpeed );
 				}
-				else if(element instanceof Bonus)
-					eatPellet((Bonus)element);
+				else if(ge instanceof Bonus){
+					if(element instanceof Pacman)
+						eatPellet((Bonus)ge);
+				}
 			}
 			else
-        		pacman.setPositionX(0);
+        		element.setPositionX(0);
 		}
 	}
 	
-	private void autoMove() {
-		moveCount++;
+	private void autoMove(MoveableElement element) {
+		if(world.hasIntersection())
+    		element.setLastState(element.getState());
+		
 		if(moveCount == 8){
-			if(pacman.getState() == State.RIGHT){
-				pacman.setPositionY( pacman.getPosY() + moveSpeed );
+			if(element.getLastState() == State.RIGHT){
+				element.setPositionY( element.getPosY() + moveSpeed );
 			}
-			else if(pacman.getState() == State.LEFT){
-				pacman.setPositionY( pacman.getPosY() -moveSpeed );
+			else if(element.getLastState() == State.LEFT){
+				element.setPositionY( element.getPosY() - moveSpeed );
 			}
-			else if(pacman.getState() == State.UP){
-				pacman.setPositionX( pacman.getPosX() - moveSpeed );
+			else if(element.getLastState() == State.UP){
+				element.setPositionX( element.getPosX() - moveSpeed );
 			}
-			else if(pacman.getState() == State.DOWN){
-				pacman.setPositionX( pacman.getPosX() +moveSpeed );
+			else if(element.getLastState() == State.DOWN){
+				element.setPositionX( element.getPosX() + moveSpeed );
 			}
 			moveCount = 0;
 		}
@@ -222,7 +239,7 @@ public class WorldRenderer {
 	}*/
 	
 	private void displayScore(){
-		System.out.println("Lescore = " +world.getNbPoints());
+		//System.out.println("Le Score = " +world.getNbPoints());
 	}
 	
 	private void testDeath(){

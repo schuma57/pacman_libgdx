@@ -28,15 +28,23 @@ public class WorldListener implements InputProcessor{
 	public boolean keyUp(int key) {
         if(key == Input.Keys.RIGHT){
         	pacman.setState(State.RIGHT);
+        	if(pacman.getLastState() == State.LEFT)
+        		pacman.setLastState(pacman.getState());
         }
         if(key == Input.Keys.LEFT){
-        	pacman.setState(State.LEFT);       	
+        	pacman.setState(State.LEFT);
+        	if(pacman.getLastState() == State.RIGHT)
+        		pacman.setLastState(pacman.getState());
         }
         if(key == Input.Keys.DOWN){
         	pacman.setState(State.DOWN);
+        	if(pacman.getLastState() == State.UP)
+        		pacman.setLastState(pacman.getState());
         }
         if(key == Input.Keys.UP){
         	pacman.setState(State.UP);
+        	if(pacman.getLastState() == State.DOWN)
+        		pacman.setLastState(pacman.getState());
         }
 		
 		return false;

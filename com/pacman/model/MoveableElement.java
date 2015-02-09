@@ -2,6 +2,7 @@ package com.pacman.model;
 
 public abstract class MoveableElement extends GameElement{
 	private State state;
+	private State lastState;
 	private float speed;
 	
 	public MoveableElement(float x, float y) {
@@ -30,5 +31,13 @@ public abstract class MoveableElement extends GameElement{
 	
 	public void setSpeed(float s){
 		speed = s;
+	}
+
+	public State getLastState() {
+		return lastState;
+	}
+
+	public void setLastState(State lastState) {
+		this.lastState = lastState;
 	}
 }

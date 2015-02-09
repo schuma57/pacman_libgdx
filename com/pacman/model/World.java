@@ -87,6 +87,32 @@ public class World implements Iterable<GameElement>{
 		win = true; 
 	}
 	
+	public boolean hasIntersection(){
+		float posXFloat = pac.getPosX();
+		float posYFloat = pac.getPosY();
+		int x=0; int y=0;
+		
+		if(pac.getLastState() == State.LEFT){
+			x = Math.round(posXFloat);
+			y = Math.round(posYFloat);
+		}
+		else if(pac.getLastState() == State.RIGHT){
+			x = Math.round(posXFloat);
+			y = (int) Math.floor(posYFloat);
+		}
+		else if(pac.getLastState() == State.UP){
+			x = Math.round(posXFloat);
+			y = (int) Math.floor(posYFloat);
+		}
+		else if(pac.getLastState() == State.DOWN){
+			x = (int)Math.floor(posXFloat);
+			y = (int) Math.floor(posYFloat);
+		}
+		
+		
+		return maze.isIntersection(x, y);
+	}
+	
 	@Override
 	public Iterator<GameElement> iterator() {
 		return new WorldIterator(this);
