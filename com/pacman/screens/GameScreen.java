@@ -39,7 +39,7 @@ public class GameScreen implements Screen{
 	
 	@Override
 	public void resize(int width, int height) {
-		renderer.resize(width, height);
+		renderer.resize(width-60, height);
 		
 		camera.setToOrtho(false, width, height);
 	    camera.position.set (width / 2, height / 2, 0);

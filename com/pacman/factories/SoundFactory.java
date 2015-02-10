@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.pacman.game.ConstantsGame;
 
 public class SoundFactory {
 	private static SoundFactory instance = null;
@@ -12,11 +13,11 @@ public class SoundFactory {
 	
 	private SoundFactory(){
 		sounds = new HashMap<String, Sound>();
-		sounds.put("chomp", Gdx.audio.newSound(Gdx.files.internal("sounds/pacman-chomp.ogg")));
-		sounds.put("death", Gdx.audio.newSound(Gdx.files.internal("sounds/pacman-death.ogg")));
-		sounds.put("eatFruit", Gdx.audio.newSound(Gdx.files.internal("sounds/pacman-eatfruit.ogg")));
-		sounds.put("eatGhost", Gdx.audio.newSound(Gdx.files.internal("sounds/pacman-eatghost.ogg")));
-		sounds.put("extraPac", Gdx.audio.newSound(Gdx.files.internal("sounds/pacman-extrapac.ogg")));
+		sounds.put("chomp", Gdx.audio.newSound(Gdx.files.internal(ConstantsGame.CHOMP_SOUND)));
+		sounds.put("death", Gdx.audio.newSound(Gdx.files.internal(ConstantsGame.DEATH_SOUND)));
+		sounds.put("eatFruit", Gdx.audio.newSound(Gdx.files.internal(ConstantsGame.EATFRUIT_SOUND)));
+		sounds.put("eatGhost", Gdx.audio.newSound(Gdx.files.internal(ConstantsGame.EATGHOST_SOUND)));
+		sounds.put("extraPac", Gdx.audio.newSound(Gdx.files.internal(ConstantsGame.EXTRAPAC_SOUND)));
 	}
 	
 	public static SoundFactory getInstance(){

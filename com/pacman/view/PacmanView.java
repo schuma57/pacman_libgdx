@@ -24,7 +24,7 @@ public class PacmanView{
 		bounds = new Rectangle(position.x, position.y, width, height);
 		velocity = new Vector2(0, 0);
 		
-		state = State.FRONT;
+		state = State.RIGHT;
 	}
 	
 	public Vector2 getPosition() {

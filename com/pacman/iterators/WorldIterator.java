@@ -4,8 +4,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.pacman.model.GameElement;
-import com.pacman.model.Ghost;
 import com.pacman.model.World;
+import com.pacman.model.ghosts.Ghost;
 
 public class WorldIterator implements Iterator<GameElement>{
 	private World world;

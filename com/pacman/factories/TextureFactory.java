@@ -5,13 +5,14 @@ import java.util.Map;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.pacman.model.Block;
-import com.pacman.model.GhostBlue;
-import com.pacman.model.GhostPink;
-import com.pacman.model.GhostRed;
-import com.pacman.model.GhostYellow;
 import com.pacman.model.Pacman;
 import com.pacman.model.Pellet;
 import com.pacman.model.SuperPellet;
+import com.pacman.model.ghosts.GhostBlue;
+import com.pacman.model.ghosts.GhostPink;
+import com.pacman.model.ghosts.GhostRed;
+import com.pacman.model.ghosts.GhostYellow;
+import com.pacman.game.ConstantsGame;
 
 public class TextureFactory {
 	private static TextureFactory instance = null;
@@ -19,15 +20,17 @@ public class TextureFactory {
 	
 	private TextureFactory(){
 		textures = new HashMap<String, Texture>();
-		textures.put("Pacman", new Texture("images/PacManAnim.png"));
-		textures.put(Pacman.class.toString(), new Texture("images/PacManAnim.png"));
-		textures.put(Block.class.toString(), new Texture("images/bloc.png"));
-		textures.put(GhostRed.class.toString(), new Texture("images/ghost1.png"));
-		textures.put(GhostBlue.class.toString(), new Texture("images/ghost3.png"));
-		textures.put(GhostPink.class.toString(), new Texture("images/ghost2.png"));
-		textures.put(GhostYellow.class.toString(), new Texture("images/ghost4.png"));
-		textures.put(Pellet.class.toString(), new Texture("images/pellet.png"));
-		textures.put(SuperPellet.class.toString(), new Texture("images/superpellet-2.png"));
+		textures.put("Pacman", new Texture(ConstantsGame.PACMAN_IMG));
+		textures.put(Pacman.class.toString(), new Texture(ConstantsGame.PACMAN_IMG));
+		textures.put(Block.class.toString(), new Texture(ConstantsGame.BLOC_IMG));
+		textures.put(GhostRed.class.toString(), new Texture(ConstantsGame.BLINKY_IMG));
+		textures.put(GhostBlue.class.toString(), new Texture(ConstantsGame.INKY_IMG));
+		textures.put(GhostPink.class.toString(), new Texture(ConstantsGame.PINKY_IMG));
+		textures.put(GhostYellow.class.toString(), new Texture(ConstantsGame.CLYDE_IMG));
+		textures.put("AFRAID", new Texture(ConstantsGame.GHOST_AFRAID));
+		textures.put("DEATH", new Texture(ConstantsGame.GHOST_DEAD));
+		textures.put(Pellet.class.toString(), new Texture(ConstantsGame.PELLET_IMG));
+		textures.put(SuperPellet.class.toString(), new Texture(ConstantsGame.SUPERPELLET_IMG));
 	}
 	
 	public static TextureFactory getInstance(){

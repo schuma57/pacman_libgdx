@@ -1,4 +1,4 @@
-package com.pacman.observers;
+package com.pacman.listeners;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
