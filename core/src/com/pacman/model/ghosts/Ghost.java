@@ -114,7 +114,7 @@ public abstract class Ghost extends MoveableElement{
 		return direction[i] ;
 	}*/
 	
-	public void flipDirecition() {
+	public void flipDirection() {
 		if (getState() == State.LEFT)
 			setState( State.RIGHT);
 		else if (getState() == State.RIGHT)
