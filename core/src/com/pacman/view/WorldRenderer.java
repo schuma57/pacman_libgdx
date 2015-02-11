@@ -27,8 +27,6 @@ public class WorldRenderer {
 	private float boxSizeY;
 	private World world;
 	private Pacman pacman;
-	private int moveCount = 0;
-	private int time = 0;
 	private BitmapFont font;
 	
 	private PacmanFactory pacmanFactory;
@@ -143,19 +141,17 @@ public class WorldRenderer {
 	}
 	
 	public void update(){
-		moveCount++;
-		if(moveCount == 10){
-			time++;
-			pacman.autoMove();
-			testPellet();
+		if(world.getNbPoints() > 0)
+			world.subtractPoints(1);
+				
+		pacman.autoMove();
+		testPellet();
 		
-			for(Ghost g : world.getListGhosts()){
-				g.ghostMove();
-				g.autoMove();
-			}
-			System.out.println("State de bleu = " +world.getListGhosts().get(1).getState());
-			moveCount = 0;
+		for(Ghost g : world.getListGhosts()){
+			g.ghostMove();
+			g.autoMove();
 		}
+		System.out.println("State de bleu = " +world.getListGhosts().get(1).getState());
 		
 		testDeath();
 		testWin();
@@ -187,7 +183,7 @@ public class WorldRenderer {
 	
 	private void displayScore(){
 		font.draw(sBatch, "SCORE", world.getWidth()*boxSizeX, world.getHeight()*boxSizeY);
-		font.draw(sBatch, ""+(world.getNbPoints()-time),
+		font.draw(sBatch, ""+(world.getNbPoints()),
 				world.getWidth()*boxSizeX,
 				world.getHeight()*boxSizeY -boxSizeY);
 	}

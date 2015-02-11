@@ -1,6 +1,6 @@
 package com.pacman.model.ghosts;
 
-import com.pacman.model.Block;
+
 import com.pacman.model.MoveableElement;
 import com.pacman.model.Pacman;
 import com.pacman.model.State;

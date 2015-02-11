@@ -68,6 +68,10 @@ public class World implements Iterable<GameElement>{
 		return nbPoints;
 	}
 	
+	public void subtractPoints(int mallus){
+		nbPoints -= mallus;
+	}
+	
 	public void addPoints(int points){
 		nbPoints += points;
 	}
@@ -99,61 +103,11 @@ public class World implements Iterable<GameElement>{
 	}
 	
 	public boolean hasIntersection(MoveableElement element){
-		float posXFloat = element.getPosX();
-		float posYFloat = element.getPosY();
-		int x=0; int y=0;
-		
-		if(element.getLastState() == State.LEFT){
-			x = Math.round(posXFloat);
-			y = Math.round(posYFloat);
-		}
-		else if(element.getLastState() == State.RIGHT){
-			x = Math.round(posXFloat);
-			y = (int) Math.floor(posYFloat);
-		}
-		else if(element.getLastState() == State.UP){
-			x = Math.round(posXFloat);
-			y = (int) Math.floor(posYFloat);
-		}
-		else if(element.getLastState() == State.DOWN){
-			x = (int)Math.floor(posXFloat);
-			y = (int) Math.floor(posYFloat);
-		}
-		else{
-			x = (int)posXFloat;
-			y = (int)posYFloat;
-		}
-		
-		return maze.isIntersection(x, y);
+		return maze.isIntersection(element.getPosX(), element.getPosY());
 	}
 	
 	public boolean isInTheHouse(Ghost ghost){
-		float posXFloat = ghost.getPosX();
-		float posYFloat = ghost.getPosY();
-		int x=0; int y=0;
-		
-		if(ghost.getLastState() == State.LEFT){
-			x = Math.round(posXFloat);
-			y = Math.round(posYFloat);
-		}
-		else if(ghost.getLastState() == State.RIGHT){
-			x = Math.round(posXFloat);
-			y = (int) Math.floor(posYFloat);
-		}
-		else if(ghost.getLastState() == State.UP){
-			x = Math.round(posXFloat);
-			y = (int) Math.floor(posYFloat);
-		}
-		else if(ghost.getLastState() == State.DOWN){
-			x = (int)Math.floor(posXFloat);
-			y = (int) Math.floor(posYFloat);
-		}
-		else{
-			x = (int)posXFloat;
-			y = (int)posYFloat;
-		}
-		
-		return maze.isInTheHouse(x, y);
+		return maze.isInTheHouse(ghost.getPosX(), ghost.getPosY());
 	}
 	
 	

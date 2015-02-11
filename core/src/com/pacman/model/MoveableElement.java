@@ -1,10 +1,13 @@
 package com.pacman.model;
 
 public abstract class MoveableElement extends GameElement{
+	private final int MAX = 8;
+	
 	private World world;
 	private State state;
 	private State lastState;
 	private float speed;
+	private int moveCount = 0;
 	
 	public MoveableElement(int x, int y, World w) {
 		super(x, y);
@@ -48,40 +51,44 @@ public abstract class MoveableElement extends GameElement{
 	}
 	
 	public void autoMove() {
-		if(world.hasIntersection(this))
-    		setLastState(state);
-		
-		if( lastState == State.RIGHT){
-			if(!isOutOfBounds()){
-				if(!isGoingToHitAWall())
-					setPositionY( posY + 1 );
+		moveCount++;
+		if(moveCount == MAX){
+			if(world.hasIntersection(this))
+	    		setLastState(state);
+			
+			if( lastState == State.RIGHT){
+				if(!isOutOfBounds()){
+					if(!isGoingToHitAWall())
+						setPositionY( posY + 1 );
+				}
+				else
+					setPositionY(0);
 			}
-			else
-				setPositionY(0);
-		}
-		else if( lastState == State.LEFT){
-			if(!isOutOfBounds()){
-				if(!isGoingToHitAWall())
-					setPositionY( posY - 1 );
+			else if( lastState == State.LEFT){
+				if(!isOutOfBounds()){
+					if(!isGoingToHitAWall())
+						setPositionY( posY - 1 );
+				}
+				else
+					setPositionY( world.getWidth()-1);
 			}
-			else
-				setPositionY( world.getWidth()-1);
-		}
-		else if( lastState == State.UP){
-			if(!isOutOfBounds()){
-				if(!isGoingToHitAWall())
-					setPositionX( posX - 1 );
+			else if( lastState == State.UP){
+				if(!isOutOfBounds()){
+					if(!isGoingToHitAWall())
+						setPositionX( posX - 1 );
+				}
+				else
+					setPositionX( world.getHeight()-1 );
 			}
-			else
-				setPositionX( world.getHeight()-1 );
-		}
-		else if( lastState == State.DOWN){
-			if(isOutOfBounds()){
-				if(!isGoingToHitAWall())
-					setPositionX( posX + 1 );
+			else if( lastState == State.DOWN){
+				if(!isOutOfBounds()){
+					if(!isGoingToHitAWall())
+						setPositionX( posX + 1 );
+				}
+				else
+					setPositionX(0);
 			}
-			else
-				setPositionX(0);
+			moveCount = 0;
 		}
 	}
 	
