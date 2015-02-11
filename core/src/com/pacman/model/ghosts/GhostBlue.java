@@ -12,5 +12,6 @@ public class GhostBlue extends Ghost{
 	@Override
 	public void ghostMove() {
 		noChaseMode();
+		autoMove();
 	}
 }

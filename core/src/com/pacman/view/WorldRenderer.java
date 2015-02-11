@@ -149,9 +149,10 @@ public class WorldRenderer {
 		
 		for(Ghost g : world.getListGhosts()){
 			g.ghostMove();
-			g.autoMove();
+			//g.autoMove();
 		}
-		System.out.println("State de bleu = " +world.getListGhosts().get(1).getState());
+		//System.out.println("State de jaune = " +world.getListGhosts().get(3).getState());
+		//System.out.println("State de rouge = " +world.getListGhosts().get(0).getState());
 		
 		testDeath();
 		testWin();

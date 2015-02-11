@@ -40,6 +40,7 @@ public class Maze implements Iterable<GameElement>{
 	};
 	
 	private GameElement[][] tableMaze2;
+	private boolean[][] visited;
 	private int height;
 	private int width;
 	private List<Bonus> listPellets;
@@ -48,6 +49,7 @@ public class Maze implements Iterable<GameElement>{
 		height = tableMaze1.length;
 		width  = tableMaze1[0].length;
 		tableMaze2 = new GameElement[height][width];
+		visited = new boolean[height][width];
 		listPellets = new ArrayList<Bonus>();
 		createMaze();
 	}
@@ -95,7 +97,6 @@ public class Maze implements Iterable<GameElement>{
 	}
 	
 	public int getNbPellets(){
-		//return 0;
 		int nb = 0;
 		for(GameElement[] tab : tableMaze2){
 			for(GameElement element : tab){
@@ -103,7 +104,8 @@ public class Maze implements Iterable<GameElement>{
 					nb++;
 			}
 		}
-      	return nb;
+		//return 0;
+		return nb;
 	}
 	
 	public boolean isIntersection(int x, int y){
@@ -112,6 +114,18 @@ public class Maze implements Iterable<GameElement>{
 	
 	public boolean isInTheHouse(int x, int y){
 		return tableMaze1[x][y] == 9;
+	}
+	
+	public void clearVisited() {
+		for (int x=0;x< height;x++) {
+			for (int y=0;y< width ; y++) {
+				visited[x][y] = false;
+			}
+		}
+	}
+	
+	public void pathFinderVisited(int x, int y) {
+		visited[x][y] = true;
 	}
 	
 	@Override

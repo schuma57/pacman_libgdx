@@ -23,8 +23,10 @@ public class WinScreen implements Screen{
 	private BitmapFont font;
 	private Stage stage;
 	private Music music;
+	private int score;
 	
-	public WinScreen(){
+	public WinScreen(int score){
+		this.score = score;
 	}
 	
 	@Override

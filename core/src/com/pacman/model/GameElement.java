@@ -32,20 +32,26 @@ package com.pacman.model;
  */
 
 public abstract class GameElement {
-	protected int posX;
-	protected int posY;
+	protected Position position;
 	
 	public GameElement(int x, int y){
-		posX = x;
-		posY = y;
+		this(new Position(x,y));
+	}
+	
+	public GameElement(Position pos){
+		position = pos;
+	}
+	
+	public Position getPosition(){
+		return position;
 	}
 	
 	public int getPosX(){
-		return posX;
+		return position.getX();
 	}
 	
 	public int getPosY(){
-		return posY;
+		return position.getY();
 	}
 	
 	public String getName(){

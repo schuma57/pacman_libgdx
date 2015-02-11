@@ -31,7 +31,7 @@ public class GameScreen implements Screen{
 			game.setScreen(new DeathScreen());
 		}
 		if(world.hasWin()){
-			game.setScreen(new WinScreen());
+			game.setScreen(new WinScreen(world.getNbPoints()));
 		}
 		renderer.getBatch().setProjectionMatrix(camera.combined);
 		renderer.render(delta);
