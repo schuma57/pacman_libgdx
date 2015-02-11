@@ -9,12 +9,12 @@ import com.pacman.model.World;
 public abstract class Ghost extends MoveableElement{
 	private Pacman pacman;
 	private GhostState life;
-	protected float startX;
-	protected float startY;
-	protected float targetX = 0;
-	protected float targetY = 0;
+	protected int startX;
+	protected int startY;
+	protected int targetX = 0;
+	protected int targetY = 0;
 	
-	public Ghost(float x, float y, World w) {
+	public Ghost(int x, int y, World w) {
 		super(x, y, w);
 		startX = x;
 		startY = y;

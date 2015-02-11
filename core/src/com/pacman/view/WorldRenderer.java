@@ -144,7 +144,7 @@ public class WorldRenderer {
 	
 	public void update(){
 		moveCount++;
-		if(moveCount == 8){
+		if(moveCount == 10){
 			time++;
 			pacman.autoMove();
 			testPellet();
@@ -162,40 +162,10 @@ public class WorldRenderer {
 	}
 	
 	private void testPellet(){
-		float posXFloat = pacman.getPosX();
-		float posYFloat = pacman.getPosY();
-	
-		if(pacman.getLastState() == State.LEFT){
-			GameElement ge =
-					world.getMaze().getElement((int)posXFloat, (int) Math.floor(posYFloat));
-				
+		GameElement ge =
+				world.getMaze().getElement(pacman.getPosX(), pacman.getPosY());
 			if(ge instanceof Bonus)
 				eatPellet((Bonus)ge);
-		}
-		else if(pacman.getLastState() == State.RIGHT){
-			GameElement ge =
-				world.getMaze().getElement((int)posXFloat, (int) Math.round(posYFloat));
-				
-				if(ge instanceof Bonus){
-						eatPellet((Bonus)ge);
-				}
-		}
-		else if(pacman.getLastState() == State.UP){
-			GameElement ge =
-					world.getMaze().getElement((int)Math.floor(posXFloat), (int)posYFloat);
-				
-			if(ge instanceof Bonus){
-				eatPellet((Bonus)ge);
-			}
-		}
-		else if(pacman.getLastState() == State.DOWN){
-			GameElement ge =
-					world.getMaze().getElement((int)Math.round(posXFloat), (int)posYFloat);
-				
-			if(ge instanceof Bonus){
-				eatPellet((Bonus)ge);
-			}
-		}
 	}
 	
 	private void eatPellet(Bonus pellet){

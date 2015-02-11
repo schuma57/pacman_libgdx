@@ -32,19 +32,19 @@ package com.pacman.model;
  */
 
 public abstract class GameElement {
-	protected float posX;
-	protected float posY;
+	protected int posX;
+	protected int posY;
 	
-	public GameElement(float x, float y){
+	public GameElement(int x, int y){
 		posX = x;
 		posY = y;
 	}
 	
-	public float getPosX(){
+	public int getPosX(){
 		return posX;
 	}
 	
-	public float getPosY(){
+	public int getPosY(){
 		return posY;
 	}
 	

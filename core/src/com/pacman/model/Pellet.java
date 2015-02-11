@@ -3,7 +3,7 @@ package com.pacman.model;
 public class Pellet extends Bonus{
 	private final int POINTS = 100;
 	
-	public Pellet(float x, float y) {
+	public Pellet(int x, int y) {
 		super(x, y);
 	}
 

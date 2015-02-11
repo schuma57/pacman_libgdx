@@ -4,7 +4,7 @@ import com.pacman.model.World;
 
 public class GhostYellow extends Ghost{
 
-	public GhostYellow(float x, float y, World w) {
+	public GhostYellow(int x, int y, World w) {
 		super(x, y, w);
 		setSpeed(1f);
 	}

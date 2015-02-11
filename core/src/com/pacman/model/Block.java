@@ -2,7 +2,7 @@ package com.pacman.model;
 
 public class Block extends GameElement{
 	
-	public Block(float x, float y) {
+	public Block(int x, int y) {
 		super(x, y);
 	}
 }

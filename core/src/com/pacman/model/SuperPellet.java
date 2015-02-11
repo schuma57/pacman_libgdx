@@ -3,7 +3,7 @@ package com.pacman.model;
 public class SuperPellet extends Bonus{
 	private final int POINTS = 500;
 	
-	public SuperPellet(float x, float y) {
+	public SuperPellet(int x, int y) {
 		super(x, y);
 		// TODO Auto-generated constructor stub
 	}

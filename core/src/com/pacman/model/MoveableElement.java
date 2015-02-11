@@ -6,16 +6,16 @@ public abstract class MoveableElement extends GameElement{
 	private State lastState;
 	private float speed;
 	
-	public MoveableElement(float x, float y, World w) {
+	public MoveableElement(int x, int y, World w) {
 		super(x, y);
 		world = w;
 	}
 
-	public void setPositionX(float x){
+	public void setPositionX(int x){
 		this.posX = x;
 	}
 	
-	public void setPositionY(float y){
+	public void setPositionY(int y){
 		this.posY = y;
 	}
 	
@@ -52,52 +52,58 @@ public abstract class MoveableElement extends GameElement{
     		setLastState(state);
 		
 		if( lastState == State.RIGHT){
-			if(!isWall())
-				setPositionY( posY + speed );
-			testOutOfBounds();
+			if(!isOutOfBounds()){
+				if(!isGoingToHitAWall())
+					setPositionY( posY + 1 );
+			}
+			else
+				setPositionY(0);
 		}
 		else if( lastState == State.LEFT){
-			if(!isWall())
-				setPositionY( posY - speed );
-			testOutOfBounds();
+			if(!isOutOfBounds()){
+				if(!isGoingToHitAWall())
+					setPositionY( posY - 1 );
+			}
+			else
+				setPositionY( world.getWidth()-1);
 		}
 		else if( lastState == State.UP){
-			if(!isWall())
-				setPositionX( posX - speed );
-			testOutOfBounds();
+			if(!isOutOfBounds()){
+				if(!isGoingToHitAWall())
+					setPositionX( posX - 1 );
+			}
+			else
+				setPositionX( world.getHeight()-1 );
 		}
 		else if( lastState == State.DOWN){
-			if(!isWall())
-				setPositionX( posX + speed );
-			testOutOfBounds();
+			if(isOutOfBounds()){
+				if(!isGoingToHitAWall())
+					setPositionX( posX + 1 );
+			}
+			else
+				setPositionX(0);
 		}
 	}
 	
-	protected boolean isWall(){
-		float posXFloat = getPosX();
-		float posYFloat = getPosY();
-		
+	protected boolean isGoingToHitAWall(){
+		GameElement ge = null;
 		if(getLastState() == State.LEFT){
-			GameElement ge =
-					world.getMaze().getElement((int)posXFloat, (int) Math.round(posYFloat) -1);
+			ge = world.getMaze().getElement(posX, posY -1);
 			if(ge instanceof Block)
 				return true;
 		}
 		else if(getLastState() == State.RIGHT){
-			GameElement ge =
-					world.getMaze().getElement((int)Math.round(posXFloat), (int) Math.floor(posYFloat)+1);
+			ge = world.getMaze().getElement(posX, posY +1);
 			if(ge instanceof Block)
 				return true;
 		}
 		else if(getLastState() == State.UP){
-			GameElement ge =
-					world.getMaze().getElement((int)Math.round(posXFloat)-1, (int)posYFloat);
+			ge = world.getMaze().getElement(posX -1, posY);
 			if(ge instanceof Block)
 				return true;
 		}
 		else if(getLastState() == State.DOWN){
-			GameElement ge =
-					world.getMaze().getElement((int)Math.floor(posXFloat)+1, (int)posYFloat);
+			ge = world.getMaze().getElement(posX +1, posY);
 			if(ge instanceof Block)
 				return true;
 		}
@@ -105,31 +111,21 @@ public abstract class MoveableElement extends GameElement{
 		return false;
 	}
 	
-	private void testOutOfBounds(){
+	private boolean isOutOfBounds(){
 		if(getLastState() == State.LEFT){
-			if(getPosY() - speed >= 0){	
-			}
-			else
-        		setPositionY( world.getWidth()-1);
+			if( getPosY() -1 < 0 ) return true;
 		}
 		else if(getLastState() == State.RIGHT){
-			if(getPosY() + 1 < world.getWidth()){
-			}
-			else
-    			setPositionY(0);
+			if( getPosY() +1 > world.getWidth() -1 ) return true;
 		}
 		else if(getLastState() == State.UP){
-			if(getPosX() - speed >= 0){
-			}
-			else
-        		setPositionX( world.getHeight()-1 );
+			if( getPosX() - 1 < 0 ) return true;
 		}
 		else if(getLastState() == State.DOWN){
-			if(getPosX() + speed < world.getHeight()){
-			}
-			else
-        		setPositionX(0);
+			if( getPosX() + 1 > world.getHeight() -1 ) return true;
 		}
+		
+		return false;
 	}
 	
 }

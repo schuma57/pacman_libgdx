@@ -2,7 +2,7 @@ package com.pacman.model;
 
 public abstract class Bonus extends GameElement {
 	
-	public Bonus(float x, float y) {
+	public Bonus(int x, int y) {
 		super(x, y);
 	}
 	
