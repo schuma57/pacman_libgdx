@@ -1,7 +1,7 @@
 package com.pacman.model;
 
 public abstract class MoveableElement extends GameElement{
-	private final int MAX = 8;
+	private final int MAX = 9;
 	
 	private World world;
 	private State state;
@@ -15,11 +15,15 @@ public abstract class MoveableElement extends GameElement{
 	}
 
 	public void setPositionX(int x){
-		this.posX = x;
+		getPosition().setX(x);
 	}
 	
 	public void setPositionY(int y){
-		this.posY = y;
+		getPosition().setY(y);
+	}
+	
+	public void setPosition(Position pos){
+		position = pos;
 	}
 	
 	protected World getWorld(){
@@ -59,7 +63,7 @@ public abstract class MoveableElement extends GameElement{
 			if( lastState == State.RIGHT){
 				if(!isOutOfBounds()){
 					if(!isGoingToHitAWall())
-						setPositionY( posY + 1 );
+						setPositionY( getPosY() + 1 );
 				}
 				else
 					setPositionY(0);
@@ -67,7 +71,7 @@ public abstract class MoveableElement extends GameElement{
 			else if( lastState == State.LEFT){
 				if(!isOutOfBounds()){
 					if(!isGoingToHitAWall())
-						setPositionY( posY - 1 );
+						setPositionY( getPosY() - 1 );
 				}
 				else
 					setPositionY( world.getWidth()-1);
@@ -75,7 +79,7 @@ public abstract class MoveableElement extends GameElement{
 			else if( lastState == State.UP){
 				if(!isOutOfBounds()){
 					if(!isGoingToHitAWall())
-						setPositionX( posX - 1 );
+						setPositionX( getPosX() - 1 );
 				}
 				else
 					setPositionX( world.getHeight()-1 );
@@ -83,7 +87,7 @@ public abstract class MoveableElement extends GameElement{
 			else if( lastState == State.DOWN){
 				if(!isOutOfBounds()){
 					if(!isGoingToHitAWall())
-						setPositionX( posX + 1 );
+						setPositionX( getPosX() + 1 );
 				}
 				else
 					setPositionX(0);
@@ -95,22 +99,22 @@ public abstract class MoveableElement extends GameElement{
 	protected boolean isGoingToHitAWall(){
 		GameElement ge = null;
 		if(getLastState() == State.LEFT){
-			ge = world.getMaze().getElement(posX, posY -1);
+			ge = world.getMaze().getElement(getPosX(), getPosY() -1);
 			if(ge instanceof Block)
 				return true;
 		}
 		else if(getLastState() == State.RIGHT){
-			ge = world.getMaze().getElement(posX, posY +1);
+			ge = world.getMaze().getElement(getPosX(), getPosY() +1);
 			if(ge instanceof Block)
 				return true;
 		}
 		else if(getLastState() == State.UP){
-			ge = world.getMaze().getElement(posX -1, posY);
+			ge = world.getMaze().getElement(getPosX() -1, getPosY());
 			if(ge instanceof Block)
 				return true;
 		}
 		else if(getLastState() == State.DOWN){
-			ge = world.getMaze().getElement(posX +1, posY);
+			ge = world.getMaze().getElement(getPosX() +1, getPosY());
 			if(ge instanceof Block)
 				return true;
 		}

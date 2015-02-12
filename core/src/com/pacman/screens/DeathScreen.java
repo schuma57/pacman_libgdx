@@ -23,6 +23,7 @@ public class DeathScreen implements Screen{
 	private BitmapFont font;
 	private Stage stage;
 	private Sound sound;
+	private boolean play = false;
 	
 	public DeathScreen(){
 	}
@@ -39,7 +40,10 @@ public class DeathScreen implements Screen{
 		stage.act(delta);
 		
 		sBatch.begin();
-		sound.play();
+		if(!play){
+			sound.play();
+			play = true;
+		}
 		stage.draw();
 		sBatch.end();
 	}
@@ -97,7 +101,7 @@ public class DeathScreen implements Screen{
 		skin.add("logo", TextureFactory.getInstance().getTexture(Pacman.class.toString()));
 		font = new BitmapFont();
 		font.setColor(Color.BLACK);
-		font.setScale(4);
+		font.setScale(3);
 		
 		sound = SoundFactory.getInstance().getSound("death");
 	}

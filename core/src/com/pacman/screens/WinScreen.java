@@ -7,10 +7,13 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.pacman.factories.MusicFactory;
 import com.pacman.factories.TextureFactory;
@@ -23,8 +26,12 @@ public class WinScreen implements Screen{
 	private BitmapFont font;
 	private Stage stage;
 	private Music music;
+	private int score;
+	private Label label;
+	private LabelStyle labelStyle;
 	
-	public WinScreen(){
+	public WinScreen(int score){
+		this.score = score;
 	}
 	
 	@Override
@@ -63,6 +70,8 @@ public class WinScreen implements Screen{
 		button.setX(Gdx.graphics.getWidth() / 2 - button.getWidth() / 2);
 		button.setY(Gdx.graphics.getHeight() / 2 - button.getHeight() / 2);
 		
+		label.setPosition(Gdx.graphics.getWidth()/2 - label.getWidth()/2, 60);
+		stage.addActor(label);
 		stage.addActor(button);
 	}
 	
@@ -96,8 +105,10 @@ public class WinScreen implements Screen{
 		skin = new Skin();
 		skin.add("logo", TextureFactory.getInstance().getTexture(Block.class.toString()));
 		font = new BitmapFont();
-		font.setColor(Color.BLACK);
-		font.setScale(4);
+		font.setColor(Color.WHITE);
+		font.setScale(3);
+		labelStyle = new LabelStyle(font, Color.WHITE);
+		label = new Label("SCORE : " +score, labelStyle);
 		
 		music = MusicFactory.getInstance().getMusic("victory");
 	}

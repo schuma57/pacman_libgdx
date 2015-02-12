@@ -31,7 +31,7 @@ public class GameScreen implements Screen{
 			game.setScreen(new DeathScreen());
 		}
 		if(world.hasWin()){
-			game.setScreen(new WinScreen());
+			game.setScreen(new WinScreen(world.getNbPoints()));
 		}
 		renderer.getBatch().setProjectionMatrix(camera.combined);
 		renderer.render(delta);
@@ -42,7 +42,7 @@ public class GameScreen implements Screen{
 		renderer.resize(width-60, height);
 		
 		camera.setToOrtho(false, width, height);
-	    camera.position.set (width / 2, height / 2, 0);
+	    camera.position.set(width / 2, height / 2, 0);
 	    camera.update();
 	}
 	

@@ -1,8 +1,12 @@
 package com.pacman.model.ghosts;
 
 
+import java.util.ArrayList;
+
+import algorithms.Astar;
 import com.pacman.model.MoveableElement;
 import com.pacman.model.Pacman;
+import com.pacman.model.Position;
 import com.pacman.model.State;
 import com.pacman.model.World;
 
@@ -13,6 +17,9 @@ public abstract class Ghost extends MoveableElement{
 	protected int startY;
 	protected int targetX = 0;
 	protected int targetY = 0;
+	
+	private Astar astar = new Astar(getWorld().getMaze(), 25, false);
+	private ArrayList<Position> chemin = new ArrayList<Position>();
 	
 	public Ghost(int x, int y, World w) {
 		super(x, y, w);
@@ -28,91 +35,48 @@ public abstract class Ghost extends MoveableElement{
 	
 	
 	private void reset(){
-		posX = startX;
-		posY = startY;
+		position = new Position(startX, startY);
 		life = GhostState.NORMAL;
 		setState(State.UP);
 		setLastState(State.FRONT);
 	}
 	
-	protected void chaseMode(){
-		//setLastState(calculDirection(getPacman().getPosX(), getPacman().getPosY()));
-	}
-	
 	protected void noChaseMode(){
 		if(getWorld().isInTheHouse(this)){
 			targetX = 11;
-			targetY = 12;
+			targetY = 13;
 			
-			if(getPosY() > targetY)
-				setLastState(State.LEFT);
-			if(getPosY() < targetY)
-				setLastState(State.RIGHT);
 			if(getPosX() > targetX )
 				setLastState(State.UP);
-			if(getPosX() < targetX)
+			else if(getPosX() < targetX)
 				setLastState(State.DOWN);
+			if(getPosY() > targetY)
+				setLastState(State.LEFT);
+			else if(getPosY() < targetY)
+				setLastState(State.RIGHT);
 		}
 		else{
-			if(getWorld().hasIntersection(this))
-				setLastState(State.randomState());
+			setState(State.randomState());
 		}
 	}
 	
-	protected void escapePacman(){
+	protected void chaseMode(){
+		if(getWorld().isInTheHouse(this)){
+			targetX = 11;
+			targetY = 13;
+		}
+		else{
+			targetX = pacman.getPosX();
+			targetY = pacman.getPosY();
+		}
 		
+		chemin = astar.findPath( getPosX(), getPosY(), targetX, targetY);
+		if(chemin != null && chemin.get(1) != null)
+			setPosition(chemin.get(chemin.size() - 2));	
 	}
 	
-	/*private State calculDirection(float xPac, float yPac) 
-	{
-		State[] direction = new State[4] ;
-		int cx = (int) (xPac - getPosX()) ;
-		int cy = (int) (yPac - getPosY()) ;
-		
-		//if(life == GhostState.AFRAID)){
-		//	cx = -cx ; cy = -cy ;
-		//}
-		
-		
-		if ((cx == 0) && (cy == 0)) direction[0] = State.FRONT; //FRONT here
-		else{
-		  if (Math.abs(cx) > Math.abs(cy))
-			{
-			 	if (cx > 0) { direction[0] = State.DOWN ; direction[3] = State.UP ; }
-			    else { direction[0] = State.UP ; direction[3] = State.DOWN ; }
-			 	if (cy > 0) { direction[1] = State.RIGHT ; direction[2] = State.LEFT ; }
-			 	else { direction[1] = State.LEFT ; direction[2] = State.RIGHT ; }
-			}
-		  else
-			{
-				if (cx > 0) { direction[1] = State.DOWN ; direction[2] = State.UP ; }
-			    else { direction[1] = State.UP ; direction[2] = State.DOWN ; }
-			 	if (cy > 0) { direction[0] = State.RIGHT ; direction[3] = State.LEFT ; }
-			 	else { direction[0] = State.LEFT ; direction[3] = State.RIGHT ; }
-			}
-		}
-
-
-		// On determine la direction la plus prioritaire qui ne pointe pas une brique.
-		boolean sortie = false ;
-		int i = -1 ;
-		int new_x = (int)getPosX();
-		int new_y = (int)getPosY() ; 
-		do
-		{
-			i++ ;
-			if (direction[i] == State.UP)        { new_x = (int)getPosX()-1 ; new_y = (int)getPosY()  ; }
-			else if (direction[i] == State.DOWN)    { new_x = (int)getPosX()+1 ; new_y = (int)getPosY()   ; }
-			else if (direction[i] == State.LEFT) { new_x = (int) getPosX()   ; new_y = (int)getPosY()-1 ; }
-			else if (direction[i] == State.RIGHT) { new_x = (int) getPosX()   ; new_y = (int)getPosY()+1 ; }
-
-			if ( !(getWorld().getMaze().getElement(new_x, new_y) instanceof Block) )
-				sortie = true ;
-		} while(sortie == false) ;
-
-		if(i>3) System.out.println("Fantome.calculDirection : Cas Impossible...") ;
-		return direction[i] ;
-	}*/
+	protected void escapePacman(){	
+	}
 	
 	public void flipDirection() {
 		if (getState() == State.LEFT)
@@ -144,4 +108,9 @@ public abstract class Ghost extends MoveableElement{
 	public GhostState getLife(){
 		return life;
 	}
+	
+	public void findByAstar(Position start, Position goal ){
+		
+	}
+   
 }

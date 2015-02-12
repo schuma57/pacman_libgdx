@@ -1,6 +1,7 @@
 package com.pacman.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
@@ -36,6 +37,10 @@ public class MainScreen implements Screen{
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(0, 0, 0, 0);
+		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+			Gdx.app.exit();
+		}
+		
 		stage.act(delta);
 		
 		sBatch.begin();
@@ -108,7 +113,7 @@ public class MainScreen implements Screen{
 		skin.add("logo", TextureFactory.getInstance().getTexture(Pacman.class.toString()));
 		font = new BitmapFont();
 		font.setColor(Color.BLACK);
-		font.setScale(4);
+		font.setScale(3);
 		
 		music = MusicFactory.getInstance().getMusic("beginning");
 		music.setLooping(true);
