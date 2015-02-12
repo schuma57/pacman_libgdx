@@ -2,12 +2,9 @@ package algorithms;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-
 import com.pacman.model.Block;
 import com.pacman.model.Maze;
 import com.pacman.model.Position;
-import com.pacman.model.ghosts.Ghost;
 
 public class Astar {
 	private ArrayList closed = new ArrayList();
@@ -63,7 +60,7 @@ public class Astar {
 	/**
 	 * @see PathFinder#findPath(Mover, int, int, int, int)
 	 */
-	public ArrayList<Position> findPath(Ghost ghost, int sx, int sy, int tx, int ty) {
+	public ArrayList<Position> findPath( int sx, int sy, int tx, int ty) {
 		// easy first check, if the destination is blocked, we can't get there
 
 		if (maze.getElement(tx, ty) instanceof Block) {
@@ -123,14 +120,14 @@ public class Astar {
 					int xp = x + current.x;
 					int yp = y + current.y;
 					
-					if (isValidLocation(ghost,sx,sy,xp,yp)) {
+					if (isValidLocation(sx,sy,xp,yp)) {
 						// the cost to get to this node is cost the current plus the movement
 
 						// cost to reach this node. Note that the heursitic value is only used
 
 						// in the sorted open list
 
-						float nextStepCost = current.cost + getMovementCost(ghost, current.x, current.y, xp, yp);
+						float nextStepCost = current.cost + getMovementCost( current.x, current.y, xp, yp);
 						Node neighbour = nodes[xp][yp];
 						maze.pathFinderVisited(xp, yp);
 						
@@ -158,7 +155,7 @@ public class Astar {
 
 						if (!inOpenList(neighbour) && !(inClosedList(neighbour))) {
 							neighbour.cost = nextStepCost;
-							neighbour.heuristic = getHeuristicCost(ghost, xp, yp, tx, ty);
+							neighbour.heuristic = getHeuristicCost( xp, yp, tx, ty);
 							maxDepth = Math.max(maxDepth, neighbour.setParent(current));
 							addToOpen(neighbour);
 						}
@@ -265,15 +262,15 @@ public class Astar {
 	 * @param ghost The mover that would hold a given location
 	 * @param sx The starting x coordinate
 	 * @param sy The starting y coordinate
-	 * @param x The x coordinate of the location to check
-	 * @param y The y coordinate of the location to check
+	 * @param tx The x coordinate of the location to check
+	 * @param ty The y coordinate of the location to check
 	 * @return True if the location is valid for the given mover
 	 */
-	protected boolean isValidLocation(Ghost ghost, int sx, int sy, int x, int y) {
-		boolean invalid = (x < 0) || (y < 0) || (x >= maze.getHeight()) || (y >= maze.getWidth());
+	protected boolean isValidLocation( int sx, int sy, int tx, int ty) {
+		boolean invalid = (tx < 0) || (ty < 0) || (tx >= maze.getHeight()) || (ty >= maze.getWidth());
 		
-		if ((!invalid) && ((sx != x) || (sy != y))) {
-			invalid = (maze.getElement( x, y) instanceof Block);
+		if ((!invalid) && ((sx != tx) || (sy != ty))) {
+			invalid = (maze.getElement( tx, ty) instanceof Block);
 		}
 		
 		return !invalid;
@@ -289,7 +286,7 @@ public class Astar {
 	 * @param ty The y coordinate of the target location
 	 * @return The cost of movement through the given tile
 	 */
-	public float getMovementCost(Ghost ghost, int sx, int sy, int tx, int ty) {
+	public float getMovementCost( int sx, int sy, int tx, int ty) {
 		return 1; // maze.getCost(ghost, sx, sy, tx, ty);
 	}
 
@@ -304,8 +301,8 @@ public class Astar {
 	 * @param ty The y coordinate of the target location
 	 * @return The heuristic cost assigned to the tile
 	 */
-	public float getHeuristicCost(Ghost ghost, int x, int y, int tx, int ty) {
-		return heuristic.getCost(maze, ghost, x, y, tx, ty);
+	public float getHeuristicCost(int x, int y, int tx, int ty) {
+		return heuristic.getCost( x, y, tx, ty);
 	}
 	
 	/**

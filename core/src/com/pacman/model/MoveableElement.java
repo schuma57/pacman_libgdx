@@ -1,9 +1,7 @@
 package com.pacman.model;
 
-import com.pacman.model.ghosts.Ghost;
-
 public abstract class MoveableElement extends GameElement{
-	private final int MAX = 8;
+	private final int MAX = 9;
 	
 	private World world;
 	private State state;
@@ -61,9 +59,7 @@ public abstract class MoveableElement extends GameElement{
 		if(moveCount == MAX){
 			if(world.hasIntersection(this))
 	    		setLastState(state);
-			//if(this instanceof Ghost && world.isInTheHouse( (Ghost)this) )
-				//setLastState(state);
-				
+			
 			if( lastState == State.RIGHT){
 				if(!isOutOfBounds()){
 					if(!isGoingToHitAWall())
