@@ -1,9 +1,6 @@
-package algorithms;
+package com.pacman.algorithms;
 
-import com.pacman.model.Maze;
-import com.pacman.model.ghosts.Ghost;
-
-public class ClosestHeuristic {
+public class EuclideanHeuristic {
 
 	public float getCost(int px, int py, int tx, int ty) {		
 		float deltaX = tx - px;

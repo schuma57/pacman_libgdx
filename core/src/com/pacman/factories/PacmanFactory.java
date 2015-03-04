@@ -6,8 +6,10 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class PacmanFactory {
+	private final float TIME = 0.125f;
+	
 	private Animation anim;
-	private Texture tex;
+	private Texture texPac;
 	private TextureRegion[] walk;
 	private TextureRegion currentFrame;
 	private float stateTime;
@@ -18,8 +20,8 @@ public class PacmanFactory {
 	}
 	
 	private void create(){
-		tex = TextureFactory.getInstance().getTexture("Pacman");
-		TextureRegion[][] temp = TextureRegion.split(tex, tex.getWidth()/4, tex.getHeight());
+		texPac = TextureFactory.getInstance().getTexture("Pacman");
+		TextureRegion[][] temp = TextureRegion.split(texPac, texPac.getWidth()/4, texPac.getHeight());
 		walk = new TextureRegion[4];
 		int index = 0;
         for (int i = 0; i < 1; i++) {
@@ -28,7 +30,7 @@ public class PacmanFactory {
             }
         }
         
-        anim = new Animation(0.125f, walk);
+        anim = new Animation(TIME, walk);
         stateTime = 0f; 
 	}
 	

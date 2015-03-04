@@ -19,7 +19,6 @@ public class World implements Iterable<GameElement>{
 	private Pacman pac;
 	private List<Ghost> listGhosts;
 	private int nbPoints;
-	private boolean eatGhost;
 	private boolean death;
 	private boolean win;
 	
@@ -28,7 +27,7 @@ public class World implements Iterable<GameElement>{
 	    maze = new Maze();
 	    createGhosts();
 	    nbPoints = 0;
-	    death = win = eatGhost = false;
+	    death = win = false;
 	    listener = new WorldListener(this);
 	}
 	
@@ -97,9 +96,10 @@ public class World implements Iterable<GameElement>{
 	}
 	
 	public void ghostsAreAfraid(){
-		/*for(Ghost g : listGhosts){
-			g.setLife(GhostState.AFRAID);
-		}*/
+		for(Ghost g : listGhosts){
+			if(!g.isDeath())
+				g.setLifeToAfraid();
+		}
 	}
 	
 	public boolean hasIntersection(MoveableElement element){

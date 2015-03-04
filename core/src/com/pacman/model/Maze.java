@@ -5,38 +5,45 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Maze implements Iterable<GameElement>{
+	private final int W = 	0; //WALL
+	private final int H = 	9; //HOUSE
+	private final int D = 	3; //DOOR
+	private final int E = 	1; //EMPTY
+	private final int S = 	5; //SUPER_PELLET
+	private final int I = 	2; //INTERSECTION
+	
 	private int[][] tableMaze1 = new int[][]{
-		    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		    {0, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 0, 0, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 0},
-		    {0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
-		    {0, 5, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 5, 0},
-		    {0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
-		    {0, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 0},
-		    {0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0},
-		    {0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0},
-		    {0, 2, 1, 1, 1, 1, 2, 0, 0, 2, 1, 1, 2, 0, 0, 2, 1, 1, 2, 0, 0, 2, 1, 1, 1, 1, 2, 0},
-		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 3, 3, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 9, 9, 9, 9, 9, 9, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-		    {1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 0, 9, 9, 9, 9, 9, 9, 0, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1},
-		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-		    {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-		    {0, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 0, 0, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 0},
-		    {0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
-		    {0, 5, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 5, 0},
-		    {0, 2, 1, 2, 0, 0, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 0, 0, 2, 1, 2, 0},
-		    {0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0},
-		    {0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0},
-		    {0, 2, 1, 2, 1, 1, 2, 0, 0, 2, 1, 1, 2, 0, 0, 2, 1, 1, 2, 0, 0, 2, 1, 1, 2, 1, 2, 0},
-		    {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
-		    {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
-		    {0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0},
-		    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+		    {W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W},
+		    {W, I, E, E, E, E, I, E, E, E, E, E, I, W, W, I, E, E, E, E, E, I, E, E, E, E, I, W},
+		    {W, E, W, W, W, W, E, W, W, W, W, W, E, W, W, E, W, W, W, W, W, E, W, W, W, W, E, W},
+		    {W, S, W, W, W, W, E, W, W, W, W, W, E, W, W, E, W, W, W, W, W, E, W, W, W, W, S, W},
+		    {W, E, W, W, W, W, E, W, W, W, W, W, E, W, W, E, W, W, W, W, W, E, W, W, W, W, E, W},
+		    {W, I, E, E, E, E, I, E, E, I, E, E, I, E, E, I, E, E, I, E, E, I, E, E, E, E, I, W},
+		    {W, E, W, W, W, W, E, W, W, E, W, W, W, W, W, W, W, W, E, W, W, E, W, W, W, W, E, W},
+		    {W, E, W, W, W, W, E, W, W, E, W, W, W, W, W, W, W, W, E, W, W, E, W, W, W, W, E, W},
+		    {W, I, E, E, E, E, I, W, W, I, E, E, I, W, W, I, E, E, I, W, W, I, E, E, E, E, I, W},
+		    {W, W, W, W, W, W, E, W, W, W, W, W, E, W, W, E, W, W, W, W, W, E, W, W, W, W, W, W},
+		    {W, W, W, W, W, W, E, W, W, W, W, W, E, W, W, E, W, W, W, W, W, E, W, W, W, W, W, W},
+		    {W, W, W, W, W, W, E, W, W, I, E, E, I, I, I, I, E, E, I, W, W, E, W, W, W, W, W, W},
+		    {W, W, W, W, W, W, E, W, W, E, W, W, W, D, D, W, W, W, E, W, W, E, W, W, W, W, W, W},
+		    {W, W, W, W, W, W, E, W, W, E, W, H, H, H, H, H, H, W, E, W, W, E, W, W, W, W, W, W},
+		    {E, E, E, E, E, E, I, E, E, I, W, H, H, H, H, H, H, W, I, E, E, I, E, E, E, E, E, E},
+		    {W, W, W, W, W, W, E, W, W, E, W, W, W, W, W, W, W, W, E, W, W, E, W, W, W, W, W, W},
+		    {W, W, W, W, W, W, E, W, W, E, W, W, W, W, W, W, W, W, E, W, W, E, W, W, W, W, W, W},
+		    {W, W, W, W, W, W, E, W, W, I, E, E, E, E, E, E, E, E, I, W, W, E, W, W, W, W, W, W},
+		    {W, W, W, W, W, W, E, W, W, E, W, W, W, W, W, W, W, W, E, W, W, E, W, W, W, W, W, W},
+		    {W, W, W, W, W, W, E, W, W, E, W, W, W, W, W, W, W, W, E, W, W, E, W, W, W, W, W, W},
+		    {W, I, E, E, E, E, I, E, E, I, E, E, I, W, W, I, E, E, I, E, E, I, E, E, E, E, I, W},
+		    {W, E, W, W, W, W, E, W, W, W, W, W, E, W, W, E, W, W, W, W, W, E, W, W, W, W, E, W},
+		    {W, S, W, W, W, W, E, W, W, W, W, W, E, W, W, E, W, W, W, W, W, E, W, W, W, W, S, W},
+		    {W, I, E, I, W, W, I, E, E, I, E, E, I, E, E, I, E, E, I, E, E, I, W, W, I, E, I, W},
+		    {W, W, W, E, W, W, E, W, W, E, W, W, W, W, W, W, W, W, E, W, W, E, W, W, E, W, W, W},
+		    {W, W, W, E, W, W, E, W, W, E, W, W, W, W, W, W, W, W, E, W, W, E, W, W, E, W, W, W},
+		    {W, I, E, I, E, E, I, W, W, I, E, E, I, W, W, I, E, E, I, W, W, I, E, E, I, E, I, W},
+		    {W, E, W, W, W, W, W, W, W, W, W, W, E, W, W, E, W, W, W, W, W, W, W, W, W, W, E, W},
+		    {W, E, W, W, W, W, W, W, W, W, W, W, E, W, W, E, W, W, W, W, W, W, W, W, W, W, E, W},
+		    {W, I, E, E, E, E, E, E, E, E, E, E, I, E, E, I, E, E, E, E, E, E, E, E, E, E, I, W},
+		    {W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W}
 	};
 	
 	private GameElement[][] tableMaze2;
@@ -61,9 +68,9 @@ public class Maze implements Iterable<GameElement>{
       			if(tableMaze1[i][j] == 0)
       				tableMaze2[i][j] = new Block(i, j);
       			else{
-      				if(tableMaze1[i][j] == 5)
+      				if(tableMaze1[i][j] == S)
       					tableMaze2[i][j] = new SuperPellet(i, j);
-      				else if(tableMaze1[i][j] != 9 && tableMaze1[i][j] != 3)
+      				else if(tableMaze1[i][j] != H && tableMaze1[i][j] != D)
       					tableMaze2[i][j] = new Pellet(i, j);
       			}
       		}
@@ -109,11 +116,11 @@ public class Maze implements Iterable<GameElement>{
 	}
 	
 	public boolean isIntersection(int x, int y){
-		return tableMaze1[x][y] == 2;
+		return tableMaze1[x][y] == I;
 	}
 	
 	public boolean isInTheHouse(int x, int y){
-		return tableMaze1[x][y] == 9;
+		return tableMaze1[x][y] == D;
 	}
 	
 	public void clearVisited() {

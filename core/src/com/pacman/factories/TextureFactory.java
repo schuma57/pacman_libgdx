@@ -11,6 +11,7 @@ import com.pacman.model.SuperPellet;
 import com.pacman.model.ghosts.GhostBlue;
 import com.pacman.model.ghosts.GhostPink;
 import com.pacman.model.ghosts.GhostRed;
+import com.pacman.model.ghosts.GhostState;
 import com.pacman.model.ghosts.GhostYellow;
 import com.pacman.game.ConstantsGame;
 
@@ -27,8 +28,10 @@ public class TextureFactory {
 		textures.put(GhostBlue.class.toString(), new Texture(ConstantsGame.INKY_IMG));
 		textures.put(GhostPink.class.toString(), new Texture(ConstantsGame.PINKY_IMG));
 		textures.put(GhostYellow.class.toString(), new Texture(ConstantsGame.CLYDE_IMG));
-		textures.put("AFRAID", new Texture(ConstantsGame.GHOST_AFRAID));
-		textures.put("DEATH", new Texture(ConstantsGame.GHOST_DEAD));
+		textures.put(GhostState.AFRAID.toString(), new Texture(ConstantsGame.GHOST_AFRAID));
+		textures.put(GhostState.DEATH.toString(), new Texture(ConstantsGame.GHOST_DEAD));
+		textures.put("WHITE", new Texture(ConstantsGame.GHOST_WHITE));
+		textures.put("EYES", new Texture(ConstantsGame.GHOST_EYES));
 		textures.put(Pellet.class.toString(), new Texture(ConstantsGame.PELLET_IMG));
 		textures.put(SuperPellet.class.toString(), new Texture(ConstantsGame.SUPERPELLET_IMG));
 	}

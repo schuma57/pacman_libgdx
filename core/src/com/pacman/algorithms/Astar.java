@@ -1,4 +1,4 @@
-package algorithms;
+package com.pacman.algorithms;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +21,7 @@ public class Astar {
 	/** True if we allow diaganol movement */
 	private boolean allowDiagMovement;
 	/** The heuristic we're applying to determine which nodes to search first */
-	private ClosestHeuristic heuristic;
+	private EuclideanHeuristic heuristic;
 	
 	/**
 	 * Create a path finder with the default heuristic - closest to target.
@@ -31,7 +31,7 @@ public class Astar {
 	 * @param allowDiagMovement True if the search should try diaganol movement
 	 */
 	public Astar(Maze map, int maxSearchDistance, boolean allowDiagMovement) {
-		this(map, maxSearchDistance, allowDiagMovement, new ClosestHeuristic());
+		this(map, maxSearchDistance, allowDiagMovement, new EuclideanHeuristic());
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class Astar {
 	 * @param allowDiagMovement True if the search should try diaganol movement
 	 */
 	public Astar(Maze map, int maxSearchDistance, 
-						   boolean allowDiagMovement, ClosestHeuristic heuristic) {
+						   boolean allowDiagMovement, EuclideanHeuristic heuristic) {
 		this.heuristic = heuristic;
 		this.maze = map;
 		this.maxSearchDistance = maxSearchDistance;
@@ -58,7 +58,7 @@ public class Astar {
 	}
 	
 	/**
-	 * @see PathFinder#findPath(Mover, int, int, int, int)
+	 * @see PathFinder#findPath(int, int, int, int)
 	 */
 	public ArrayList<Position> findPath( int sx, int sy, int tx, int ty) {
 		// easy first check, if the destination is blocked, we can't get there
@@ -259,7 +259,6 @@ public class Astar {
 	/**
 	 * Check if a given location is valid for the supplied mover
 	 * 
-	 * @param ghost The mover that would hold a given location
 	 * @param sx The starting x coordinate
 	 * @param sy The starting y coordinate
 	 * @param tx The x coordinate of the location to check
@@ -279,7 +278,6 @@ public class Astar {
 	/**
 	 * Get the cost to move through a given location
 	 * 
-	 * @param mover The entity that is being moved
 	 * @param sx The x coordinate of the tile whose cost is being determined
 	 * @param sy The y coordiante of the tile whose cost is being determined
 	 * @param tx The x coordinate of the target location
@@ -294,7 +292,6 @@ public class Astar {
 	 * Get the heuristic cost for the given location. This determines in which 
 	 * order the locations are processed.
 	 * 
-	 * @param mover The entity that is being moved
 	 * @param x The x coordinate of the tile whose cost is being determined
 	 * @param y The y coordiante of the tile whose cost is being determined
 	 * @param tx The x coordinate of the target location
