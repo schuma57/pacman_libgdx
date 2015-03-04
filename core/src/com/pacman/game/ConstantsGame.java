@@ -5,12 +5,14 @@ public class ConstantsGame {
 	// textures, for TextureFactory
 	public final static String PACMAN_IMG = 	"images/PacManAnim.png";
 	public final static String BLOC_IMG = 		"images/bloc.png";
-	public final static String BLINKY_IMG = 	"images/ghost_blinky.png";
-	public final static String INKY_IMG = 		"images/ghost_inky.png";
-	public final static String PINKY_IMG = 		"images/ghost_pinky.png";
-	public final static String CLYDE_IMG = 		"images/ghost_clyde.png";
-	public final static String GHOST_AFRAID = 	"images/ghostEscaping.png";
+	public final static String BLINKY_IMG = 	"images/BlinkyAnim.png";
+	public final static String INKY_IMG = 		"images/InkyAnim.png";
+	public final static String PINKY_IMG = 		"images/PinkyGhost.png";
+	public final static String CLYDE_IMG = 		"images/ClydeAnim.png";
+	public final static String GHOST_AFRAID = 	"images/AfraidAnim.png";
 	public final static String GHOST_DEAD = 	"images/ghostDead.png";
+	public final static String GHOST_WHITE = 	"images/ghostWhite.png";
+	public final static String GHOST_EYES = 	"images/GhostEyes.png";
 	public final static String PELLET_IMG = 	"images/pellet.png";
 	public final static String SUPERPELLET_IMG = "images/superpellet-2.png";
 

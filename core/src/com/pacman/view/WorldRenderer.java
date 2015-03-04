@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.pacman.factories.EyesFactory;
+import com.pacman.factories.GhostsFactory;
 import com.pacman.factories.PacmanFactory;
 import com.pacman.factories.SoundFactory;
 import com.pacman.factories.TextureFactory;
@@ -19,6 +22,8 @@ import com.pacman.model.ghosts.Ghost;
 import com.pacman.model.ghosts.GhostState;
 
 public class WorldRenderer {
+	private final int MALUS_POINTS = 1;
+	private final int NBGHOSTS = 4;
 	private SpriteBatch sBatch;
 	private Sprite spritePacman;
 	private Sprite spriteGhost[];
@@ -30,12 +35,14 @@ public class WorldRenderer {
 	private BitmapFont font;
 	
 	private PacmanFactory pacmanFactory;
+	private GhostsFactory ghostsFactory;
 
 	public WorldRenderer(World world){
 		this.world = world;
 		pacman = world.getPacman();
 		pacmanFactory = new PacmanFactory();
-		spriteGhost = new Sprite[4];
+		ghostsFactory = new GhostsFactory();
+		spriteGhost = new Sprite[NBGHOSTS];
 		
 		font = new BitmapFont();
 		font.setColor(Color.WHITE);
@@ -56,11 +63,11 @@ public class WorldRenderer {
 		for(GameElement element : world){
 			renderElement(element);
 		}
-		for(i = 0 ; i < 4; i++)
-			spriteGhost[i].draw(sBatch);
 		
+		renderPacmanAndGhosts();
+		renderEyesGhosts();
 		displayScore();
-		spritePacman.draw(sBatch);
+		
 		sBatch.end();
 	}
 	
@@ -87,27 +94,29 @@ public class WorldRenderer {
 	}
 	
 	private void createGhost(Ghost ghost, int i){
-		if(ghost.isAfraid())
-			spriteGhost[i] = new Sprite(TextureFactory.getInstance().getTexture(ghost.getLife().toString()));
+		if(ghost.isAfraid()){
+			spriteGhost[i] = new Sprite(ghostsFactory.getCurrentFrameAfraid());
+			if(System.currentTimeMillis() - ghost.getTimeToAfraid() > 6000){
+				if( System.currentTimeMillis() % 8 == 0 )
+					spriteGhost[i] = new Sprite(TextureFactory.getInstance().getTexture("WHITE"));
+			}
+		}
 		else if(ghost.isDeath())
-			spriteGhost[i] = new Sprite(TextureFactory.getInstance().getTexture(ghost.getLife().toString()));
+			spriteGhost[i] = null;
 		else
-			spriteGhost[i] = new Sprite(TextureFactory.getInstance().getTexture(ghost.getName()));
+			spriteGhost[i] = new Sprite(ghostsFactory.getCurrenFrameGhost(ghost.getClass()));
 			
-		spriteGhost[i].setOriginCenter();
-		
-		spriteGhost[i].setSize(boxSizeX-2, boxSizeY);
-		
-		spriteGhost[i].setOriginCenter();
-        spriteGhost[i].setPosition(
-        		ghost.getPosY() * boxSizeX,
-				(world.getHeight() - ghost.getPosX() -1) * boxSizeY
-        );
-        
-        spriteGhost[i].setOriginCenter();
-        
-        /*if(ghost.getLastState() == State.RIGHT)
-        	spriteGhost[i].rotate(180);*/
+		if(spriteGhost[i] != null){
+			spriteGhost[i].setOriginCenter();
+			spriteGhost[i].setSize(boxSizeX-2, boxSizeY);
+			spriteGhost[i].setOriginCenter();
+	        spriteGhost[i].setPosition(
+	        		ghost.getPosY() * boxSizeX,
+					(world.getHeight() - ghost.getPosX() -1) * boxSizeY
+	        );
+	        
+	        spriteGhost[i].setOriginCenter(); 
+		}
 	}
 	
 	
@@ -120,6 +129,26 @@ public class WorldRenderer {
 					boxSizeX,
 					boxSizeY
 			);
+		}
+	}
+	
+	private void renderPacmanAndGhosts(){
+		for(int i = 0 ; i < NBGHOSTS; i++)
+			if(spriteGhost[i] != null)
+				spriteGhost[i].draw(sBatch);
+		
+		spritePacman.draw(sBatch);
+	}
+	
+	private void renderEyesGhosts(){
+		for(Ghost ghost : world.getListGhosts()){
+			sBatch.draw(
+					EyesFactory.getInstance().getEyes(ghost.getLastState()),
+					(ghost.getPosY() * boxSizeX) +(boxSizeX*0.125f),
+					((world.getHeight() - ghost.getPosX() -1) * boxSizeY) +boxSizeY*0.125f,
+					boxSizeX*0.75f,
+					boxSizeY*0.75f
+					);
 		}
 	}
 	
@@ -140,22 +169,18 @@ public class WorldRenderer {
 		return sBatch;
 	}
 	
-	public void update(){
+	private void update(){
 		if(world.getNbPoints() > 0)
-			world.subtractPoints(1);
+			world.subtractPoints(MALUS_POINTS);
 				
 		pacman.autoMove();
 		testPellet();
 		
-		for(Ghost g : world.getListGhosts()){
+		for(Ghost g : world.getListGhosts())
 			g.ghostMove();
-			//g.autoMove();
-		}
-		//System.out.println("State de jaune = " +world.getListGhosts().get(3).getState());
-		//System.out.println("State de rouge = " +world.getListGhosts().get(0).getState());
-		
-		testDeath();
-		testWin();
+				
+		testIsDeath();
+		testHasWin();
 	}
 	
 	private void testPellet(){
@@ -171,16 +196,8 @@ public class WorldRenderer {
 		
 		SoundFactory.getInstance().getSound("chomp").play();
 		world.addPoints(pellet.getPoints());
-		world.getMaze().removeElement((int)pellet.getPosX(), (int)pellet.getPosY());;
+		world.getMaze().removeElement(pellet.getPosX(), pellet.getPosY());;
 	}
-	
-	/*private void eatBonus(){
-		for(Bonus bonus : world.getMaze().getListPellets()){
-			if(bonus.getPosX() == pacView.getPosX() &&
-					bonus.getPosY() == pacView.getPosY())
-				world.getMaze().removePellet(bonus);
-		}
-	}*/
 	
 	private void displayScore(){
 		font.draw(sBatch, "SCORE", world.getWidth()*boxSizeX, world.getHeight()*boxSizeY);
@@ -189,20 +206,20 @@ public class WorldRenderer {
 				world.getHeight()*boxSizeY -boxSizeY);
 	}
 	
-	private void testDeath(){
+	private void testIsDeath(){
 		for(Ghost g : world.getListGhosts()){
-			if(g.getLife() == GhostState.NORMAL){
-				if(g.getPosX() == pacman.getPosX() && g.getPosY() == pacman.getPosY())
+			if(g.getPosX() == pacman.getPosX() && g.getPosY() == pacman.getPosY()){
+				if(g.isNormal())
 					world.death();
+				else if(g.isAfraid()){
+					g.setLife(GhostState.DEATH);
+					SoundFactory.getInstance().getSound("eatGhost").play();
+				}
 			}
 		}
-		
-		/*for(int i = 0 ; i < 4 ; i++)
-			if(spritePacman.getBoundingRectangle().overlaps(spriteGhost[i].getBoundingRectangle()))
-				world.death();*/
 	}
 	
-	private void testWin(){
+	private void testHasWin(){
 		if(world.getMaze().getNbPellets() <= 0)
 			world.winGame();
 	}

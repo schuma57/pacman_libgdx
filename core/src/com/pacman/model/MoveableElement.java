@@ -1,7 +1,7 @@
 package com.pacman.model;
 
 public abstract class MoveableElement extends GameElement{
-	private final int MAX = 9;
+	protected final int MAX = 10;
 	
 	private World world;
 	private State state;
@@ -56,7 +56,7 @@ public abstract class MoveableElement extends GameElement{
 	
 	public void autoMove() {
 		moveCount++;
-		if(moveCount == MAX){
+		if(moveCount == MAX-1){
 			if(world.hasIntersection(this))
 	    		setLastState(state);
 			

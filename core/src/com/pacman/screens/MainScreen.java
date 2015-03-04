@@ -11,8 +11,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.pacman.factories.MusicFactory;
 import com.pacman.factories.TextureFactory;
@@ -27,6 +29,8 @@ public class MainScreen implements Screen{
 	private BitmapFont font;
 	private Stage stage;
 	private Music music;
+	private Label label;
+	private LabelStyle labelStyle;
 	
 	public MainScreen(PacManGame game){
 		this.game = game;
@@ -39,6 +43,9 @@ public class MainScreen implements Screen{
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
 			Gdx.app.exit();
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+			game.setScreen(new GameScreen(game));
 		}
 		
 		stage.act(delta);
@@ -79,7 +86,10 @@ public class MainScreen implements Screen{
 			}
 		});
 		
+		label.setPosition(Gdx.graphics.getWidth()/2 - label.getWidth()/2,
+				Gdx.graphics.getHeight() - label.getHeight());
 		stage.addActor(button);
+		stage.addActor(label);
 	}
 	
 	@Override
@@ -114,6 +124,9 @@ public class MainScreen implements Screen{
 		font = new BitmapFont();
 		font.setColor(Color.BLACK);
 		font.setScale(3);
+		
+		labelStyle = new LabelStyle(font, Color.WHITE);
+		label = new Label("PACMAN", labelStyle);
 		
 		music = MusicFactory.getInstance().getMusic("beginning");
 		music.setLooping(true);
